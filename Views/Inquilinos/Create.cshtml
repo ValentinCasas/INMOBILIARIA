@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Crear Propietario";
+}
+
+
+
+<div class="d-flex justify-content-center align-items-center col-lg-5">
+    <form class="container mt-5" asp-action="Create" method="post">
+
+        <h1> Nuevo Inquilino </h1>
+
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input class="form-control" type="text" id="nombre" name="nombre">
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input class="form-control" type="text" id="apellido" name="apellido">
+        </div>
+        <div class="form-group">
+            <label for="dni">Dni:</label>
+            <input class="form-control" type="text" id="dni" name="dni">
+        </div>
+        <div class="form-group">
+            <label for="telefono">Telefono:</label>
+            <input class="form-control" type="text" id="telefono" name="telefono">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input class="form-control" type="text" id="email" name="email">
+        </div>
+        <button class="btn btn-primary my-2" type="submit">Guardar</button>
+    </form>
+</div>
+
+
+<style>
+    body {
+        background-color: rgb(35, 39, 48);
+    }
+
+    label,
+    h1 {
+        color: white;
+    }
+
+    .form-control {
+        background-color: #474749;
+    }
+</style>
