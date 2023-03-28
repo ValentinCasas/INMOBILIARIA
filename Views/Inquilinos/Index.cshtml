@@ -13,6 +13,10 @@
                 {
                     <li class="list-group-item my-1 p-2 d-flex justify-content-between align-items-center">
                         <span><b>Nombre:</b> @item.Nombre</span>
+                        <span><b>Apellido:</b> @item.Apellido</span>
+                        <span><b>Dni:</b> @item.Dni</span>
+                        <span><b>Telefono:</b> @item.Telefono</span>
+                        <span><b>Email:</b> @item.Email</span>
 
                         <a href="@Url.Action("Update", new { id = item.Id })" class="btn d-inline-block"
                             style="background-color: rgba(12, 124, 199, 0.918);">ACTUALIZAR</a>
