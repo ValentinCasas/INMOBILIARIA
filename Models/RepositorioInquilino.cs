@@ -65,15 +65,15 @@ public class RepositorioInquilino
         return res;
     }
 
-    public Boolean Baja(int idInquilino)
+    public Boolean Baja(int id)
     {
         Boolean res = false;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"DELETE FROM inquilino WHERE Id = @idInquilino";
+            string query = @"DELETE FROM inquilino WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@idPropietario", idInquilino);
+                command.Parameters.AddWithValue("@id", id);
                 connection.Open();
                 int rowsAffected = command.ExecuteNonQuery();
                 if (rowsAffected > 0)
