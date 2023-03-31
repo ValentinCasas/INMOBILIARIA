@@ -1,43 +1,125 @@
 @model List<Inquilino>
 @{
     List<Inquilino> lista = Model;
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Lista de Inquilinos";
 }
 <div class="container mt-5">
-    <div class="text-center">
-        <h1 class="display-4">Inquilino:</h1>
-        @if (lista.Count != 0)
-        {
-            <ul class="list-group">
-                @foreach (var item in lista)
-                {
-                    <li class="list-group-item my-1 p-2 d-flex justify-content-between align-items-center">
-                        <span><b>Nombre:</b> @item.Nombre</span>
-                        <span><b>Apellido:</b> @item.Apellido</span>
-                        <span><b>Dni:</b> @item.Dni</span>
-                        <span><b>Telefono:</b> @item.Telefono</span>
-                        <span><b>Email:</b> @item.Email</span>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card" id="card-form">
+                <div class="card-header">
+                    <h1 class="display-4 text-center">INQUILINOS</h1>
+                </div>
+                <div class="card-body">
+                    <form class="my-2" method="get" action="">
+                        <div class="form-group row">
+                            <div class="col-md-8">
+                                <input type="text" name="search" placeholder="Buscar inquilinos..."
+                                    class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><ion-icon
+                                        name="search-outline"></ion-icon></button>
+                            </div>
+                        </div>
+                    </form>
 
-                        <a href="@Url.Action("Update", new { id = item.Id })" class="btn d-inline-block"
-                            style="background-color: rgba(12, 124, 199, 0.918);">ACTUALIZAR</a>
+                    @if (lista.Count != 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>DNI</th>
+                                        <th>Teléfono</th>
+                                        <th>Email</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in lista)
+                                    {
+                                        <tr class="accordion-toggle" data-toggle="collapse" data-target="#fila-@item.Id">
+                                            <td>@item.Nombre</td>
+                                            <td>@item.Apellido</td>
+                                            <td>@item.Dni</td>
+                                            <td>@item.Telefono</td>
+                                            <td>@item.Email</td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Acciones">
+                                                    <a href="@Url.Action("Update", new { id = item.Id })"
+                                                        class="btn btn-outline-secondary"><ion-icon
+                                                            name="create-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="@Url.Action("Delete", new { id = item.Id })"
+                                                        class="btn btn-outline-danger"><ion-icon
+                                                            name="trash-outline"></ion-icon>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="hiddenRow">
+                                            <td colspan="6">
+                                                <div class="collapse" id="fila-@item.Id">
+                                                    <div class="card card-body">
+                                                        <p>Información adicional sobre el propietario...</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
 
-                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn d-inline-block"
-                            style="background-color: rgba(255, 0, 0, 0.753);">BORRAR</a>    
-
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <h2>No hay personas en el sitio</h2>
-        }
-    </div>
-    <div class="text-center mt-3">
-        <a class="btn btn-primary" href="/Inquilinos/Create" role="button">Agregar Inquilino</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <h2 class="text-center">No hay inquilinos en el sitio</h2>
+                    }
+                </div>
+                <div class="card-footer text-end" id="add">
+                    <a class="btn btn-success" href="@Url.Action("Create")" role="button"><ion-icon
+                            name="add-outline"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Inquilinos totales</h5>
+                <p class="card-text">@lista.Count()</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Inquilinos totales</h5>
+                <p class="card-text">@lista.Count()</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Inquilinos totales</h5>
+                <p class="card-text">@lista.Count()</p>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 
@@ -48,21 +130,23 @@
         background-color: rgb(35, 39, 48);
     }
 
-    a {
-        text-decoration: none;
-        color: rgb(255, 255, 255);
+    #card-form {
+        background-color: #bfbebe;
+        height: 500px;
+        overflow-y: scroll;
     }
 
-    a:hover {
-        color: rgb(49, 43, 43);
+    #add {
+        position: sticky;
+        bottom: 0;
     }
 
-    .list-group-item {
-        background-color: #474749;
-        color: wheat;
-    }
-
-    h1 {
-        color: wheat;
+    .table-responsive {
+        background-color: #c2c4cf;
+        border-radius: 5px;
+        border: .5px solid rgb(105, 101, 101);
     }
 </style>
+
+
+
