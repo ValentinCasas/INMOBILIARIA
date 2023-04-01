@@ -1,7 +1,7 @@
-@model List<Inmueble>
+@model List<Contrato>
 @{
-    List<Inmueble> lista = Model;
-    ViewData["Title"] = "Lista de Inmuebles";
+    List<Contrato> lista = Model;
+    ViewData["Title"] = "Lista de Contratos";
 }
 
 <div class="container mt-5">
@@ -9,13 +9,13 @@
         <div class="col-md-12">
             <div class="card" id="card-form">
                 <div class="card-header">
-                    <h1 class="display-4 text-center">INMUEBLES</h1>
+                    <h1 class="display-4 text-center">CONTRATOS</h1>
                 </div>
                 <div class="card-body">
                     <form class="my-2" method="get" action="">
                         <div class="form-group row">
                             <div class="col-md-8">
-                                <input type="text" name="search" placeholder="Buscar inmuebles..."
+                                <input type="text" name="search" placeholder="Buscar contrato..."
                                     class="form-control" />
                             </div>
                             <div class="col-md-4">
@@ -31,13 +31,12 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Direccion</th>
-                                        <th>Uso</th>
-                                        <th>Tipo</th>
-                                        <th>CantidadAmbientes</th>
-                                        <th>Coordenadas</th>
-                                        <th>PrecioInmueble</th>
-                                        <th>Estado</th>
+                                        <th>FechaInicio</th>
+                                        <th>FechaFinalizacion</th>
+                                        <th>MontoAlquilerMensual</th>
+                                        <th>Activo</th>
+                                        <th>Inquilino</th>
+                                        <th>Pagos</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -45,13 +44,12 @@
                                     @foreach (var item in lista)
                                     {
                                         <tr class="accordion-toggle" data-toggle="collapse" data-target="#fila-@item.Id">
-                                            <td>@item.Direccion</td>
-                                            <td>@item.Uso</td>
-                                            <td>@item.Tipo</td>
-                                            <td>@item.CantidadAmbientes</td>
-                                            <td>@item.Coordenadas</td>
-                                            <td>@item.PrecioInmueble</td>
-                                            <td>@item.Estado</td>
+                                            <td>@item.FechaInicio</td>
+                                            <td>@item.FechaFinalizacion</td>
+                                            <td>@item.MontoAlquilerMensual</td>
+                                            <td>@item.Activo</td>
+                                            <td>@item.IdInquilino</td>
+                                            <td>pagos</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Acciones">
                                                     <a href="@Url.Action("Update", new { id = item.Id })"
@@ -66,11 +64,11 @@
                                             </td>
                                         </tr>
                                         <tr class="hiddenRow">
-                                            <td colspan="8">
+                                            <td colspan="7">
                                                 <div class="collapse" id="fila-@item.Id">
                                                     <div class="card card-body">
-                                                        <p>Propietario: @item.IdPropietario </p>
-                                                        <p>Contrato: @item.IdContrato </p>
+                                                        <p>bbb</p>
+                                                        <p>aaa </p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -83,7 +81,7 @@
                     }
                     else
                     {
-                        <h2 class="text-center">No hay ropietarios en el sitio</h2>
+                        <h2 class="text-center">No hay contratos en el sitio</h2>
                     }
                 </div>
                 <div class="card-footer text-end" id="add">
@@ -102,7 +100,7 @@
     <div class="col-md-4">
         <div class="card bg-secondary text-white">
             <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
+                <h5 class="card-title">Contratos totales</h5>
                 <p class="card-text">@lista.Count()</p>
             </div>
         </div>
@@ -111,7 +109,7 @@
     <div class="col-md-4">
         <div class="card bg-secondary text-white">
             <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
+                <h5 class="card-title">Contratos totales</h5>
                 <p class="card-text">@lista.Count()</p>
             </div>
         </div>
@@ -120,7 +118,7 @@
     <div class="col-md-4">
         <div class="card bg-secondary text-white">
             <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
+                <h5 class="card-title">Contratos totales</h5>
                 <p class="card-text">@lista.Count()</p>
             </div>
         </div>
@@ -148,14 +146,14 @@
         bottom: 0;
     }
 
- .accordion-toggle{
-    transition:all .5s ease;
-}
+    .accordion-toggle {
+        transition: all .5s ease;
+    }
 
- .accordion-toggle:hover{
-    background-color: #abe7a3;
-    cursor:pointer;
-}
+    .accordion-toggle:hover {
+        background-color: #abe7a3;
+        cursor: pointer;
+    }
 
     .table-responsive {
         background-color: #c2c4cf;

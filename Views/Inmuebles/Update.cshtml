@@ -45,7 +45,7 @@
             <select class="form-control" id="idPropietario" name="idPropietario">
                 @foreach (var propietario in Model.ListaPropietarios)
                 {
-                    <option value="@propietario.Id" @(propietario.Id == @Model.Inmueble.IdPropietario ? "selected" : "")>
+                    <option value="@propietario.Id" (@propietario.Id == @Model.Inmueble.IdPropietario ? "selected" : "")>
                         @propietario.ToString()</option>
                 }
             </select>
@@ -57,7 +57,7 @@
                 <option value="">Seleccione un contrato...</option>
                 @foreach (var contrato in Model.ListaContratos)
                 {
-                    <option value="@contrato.Id" @(contrato.Id == @Model.Inmueble.IdContrato ? "selected" : "")>
+                    <option value="@contrato.Id" (@contrato.Id == @Model.Inmueble.IdContrato ? "selected" : "")>
                         @contrato.ToString()</option>
                 }
             </select>
