@@ -1,0 +1,84 @@
+@{
+
+    ViewData["Title"] = "Actualizar Inmueble";
+}
+
+<div class="d-flex justify-content-center align-items-center col-lg-5">
+    <form class="container mt-5" asp-action="UpdateInmueble" method="post">
+
+        <h1> Nuevo Inmueble </h1>
+        <input type="hidden" id="id" value="@Model.Inmueble.Id" name="id">
+
+        <div class="form-group">
+            <label for="direccion">Direccion:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.Direccion" id="direccion" name="direccion">
+        </div>
+        <div class="form-group">
+            <label for="uso">Uso:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.Uso" id="uso" name="uso">
+        </div>
+        <div class="form-group">
+            <label for="tipo">Tipo:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.Tipo" id="tipo" name="tipo">
+        </div>
+        <div class="form-group">
+            <label for="cantidadAmbientes">Cantidad de ambientes:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.CantidadAmbientes" id="cantidadAmbientes"
+                name="cantidadAmbientes">
+        </div>
+        <div class="form-group">
+            <label for="coordenadas">Coordenadas:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.Coordenadas" id="coordenadas"
+                name="coordenadas">
+        </div>
+        <div class="form-group">
+            <label for="precioInmueble">Precio:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.PrecioInmueble" id="precioInmueble"
+                name="precioInmueble">
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <input class="form-control" type="text" value="@Model.Inmueble.Estado" id="estado" name="estado">
+        </div>
+        <div class="form-group">
+            <label for="idPropietario">Propietario:</label>
+            <select class="form-control" id="idPropietario" name="idPropietario">
+                @foreach (var propietario in Model.ListaPropietarios)
+                {
+                    <option value="@propietario.Id" @(propietario.Id == @Model.Inmueble.IdPropietario ? "selected" : "")>
+                        @propietario.ToString()</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="idContrato">Contrato:</label>
+            <select class="form-control" id="idContrato" name="idContrato">
+                <option value="">Seleccione un contrato...</option>
+                @foreach (var contrato in Model.ListaContratos)
+                {
+                    <option value="@contrato.Id" @(contrato.Id == @Model.Inmueble.IdContrato ? "selected" : "")>
+                        @contrato.ToString()</option>
+                }
+            </select>
+        </div>
+
+        <button class="btn btn-primary my-2" type="submit">Guardar</button>
+    </form>
+</div>
+
+
+<style>
+    body {
+        background-color: rgb(35, 39, 48);
+    }
+
+    label,
+    h1 {
+        color: white;
+    }
+
+    .form-control {
+        background-color: #474749;
+    }
+</style>

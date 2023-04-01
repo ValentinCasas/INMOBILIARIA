@@ -1,11 +1,24 @@
 using INMOBILIARIA.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class Inmueble
 {
 
     public int Id { get; set; }
+
+    public int IdPropietario { get; set; }
+    [ForeignKey(nameof(IdPropietario))]
     public Propietario Propietario { get; set; }
+
+    public int IdContrato { get; set; }
+    [ForeignKey(nameof(IdContrato))]
     public Contrato Contrato { get; set; }
+    
     public string? Direccion { get; set; }
     public string? Uso { get; set; } //comercial o residencial
     public string? Tipo { get; set; } //local, deposito, casa, departamento, etc

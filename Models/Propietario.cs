@@ -8,4 +8,10 @@ public class Propietario
     public string? Apellido { get; set; }
     public long Telefono { get; set; }
     public string Email { get; set; }
+
+public override string ToString()
+{
+    return $"Nombre: {Nombre}, Apellido: {Apellido}, Dni: {Dni}, Telefono: {Telefono}, Email: {Email}";
+}
+
 }
