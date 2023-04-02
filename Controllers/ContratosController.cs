@@ -54,5 +54,39 @@ public class ContratosController : Controller
         }
     }
 
+    [HttpGet]
+    public IActionResult Update(int id)
+    {
+        RepositorioContrato repositorioContrato = new RepositorioContrato();
+        Contrato contrato = repositorioContrato.ObtenerPorId(id);
+        if (contrato != null)
+        {
+
+            var listaInquilinos = repositorioContrato.GetInquilinos();
+            var model = new { ListaInquilinos = listaInquilinos, Contrato = contrato};
+
+            return View("Update", model);
+        }
+        else
+        {
+            return View(id);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult UpdateContrato(Contrato contrato)
+    {
+        RepositorioContrato repositorioContrato = new RepositorioContrato();
+        Boolean res = repositorioContrato.Actualizar(contrato);
+        if (res == true)
+        {
+            return RedirectToAction("index");
+        }
+        else
+        {
+            return View(contrato);
+        }
+    }
+
 
 }

@@ -115,5 +115,63 @@ public class RepositorioContrato
         return res;
     }
 
+    public Contrato ObtenerPorId(int id)
+    {
+        Contrato contrato = null;
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+
+            string query = @"SELECT * FROM contrato WHERE Id = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        contrato = new Contrato();
+                        contrato.Id = Convert.ToInt32(reader["id"]);
+                        contrato.IdInquilino = Convert.ToInt32(reader["IdInquilino"]);
+                        contrato.FechaInicio = Convert.ToDateTime(reader["FechaInicio"]);
+                        contrato.FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]);
+                        contrato.MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]);
+                        contrato.Activo = Convert.ToBoolean(reader["Activo"]);
+
+                        return contrato;
+                    }
+
+
+                }
+            }
+        }
+        return contrato;
+    }
+
+    public Boolean Actualizar(Contrato contrato)
+    {
+        Boolean res = false;
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"UPDATE contrato SET IdInquilino = @idInquilino, FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion, MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo, WHERE Id = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", contrato.Id);
+                command.Parameters.AddWithValue("@idInquilino", contrato.IdInquilino);
+                command.Parameters.AddWithValue("@fechaInicio", contrato.FechaInicio);
+                command.Parameters.AddWithValue("@fechaFinalizacion", contrato.FechaFinalizacion);
+                command.Parameters.AddWithValue("@montoAlquilerMensual", contrato.MontoAlquilerMensual);
+                command.Parameters.AddWithValue("@activo", contrato.Activo);
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    res = true;
+                }
+            }
+        }
+        return res;
+    }
+
 
 }
