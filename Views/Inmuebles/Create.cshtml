@@ -1,80 +1,104 @@
 @{
-    ViewData["Title"] = "Crear Propietario";
+    ViewData["Title"] = "Crear Inmueble";
 }
 
 
 
-<div class="d-flex justify-content-center align-items-center col-lg-5">
-    <form class="container mt-5" asp-action="Create" method="post">
 
-        <h1> Nuevo Inmueble </h1>
-
-        <div class="form-group">
-            <label for="direccion">Direccion:</label>
-            <input class="form-control" type="text" id="direccion" name="direccion">
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card col-lg-6 col-md-8 col-sm-10 mt-5">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Nuevo Inmueble</h3>
         </div>
-        <div class="form-group">
-            <label for="uso">Uso:</label>
-            <input class="form-control" type="text" id="uso" name="uso">
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div class="form-group">
+                    <label for="direccion" class="form-label"><i class="ion-location"></i> Direccion</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion"
+                        placeholder="Ingrese la direccion">
+                </div>
+                <div class="form-group">
+                    <label for="uso" class="form-label"><i class="ion-flag"></i> Uso</label>
+                    <input type="text" class="form-control" id="uso" name="uso" placeholder="Ingrese el uso">
+                </div>
+                <div class="form-group">
+                    <label for="tipo" class="form-label"><i class="ion-card"></i> Tipo</label>
+                    <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo">
+                </div>
+                <div class="form-group">
+                    <label for="cantidadAmbientes" class="form-label"><i class="ion-ios-home"></i> Cantidad de
+                        ambientes</label>
+                    <input type="text" class="form-control" id="cantidadAmbientes" name="cantidadAmbientes"
+                        placeholder="Ingrese la cantidad de ambientes">
+                </div>
+                <div class="form-group">
+                    <label for="coordenadas" class="form-label"><i class="ion-pinpoint"></i> Coordenadas</label>
+                    <input type="text" class="form-control" id="coordenadas" name="coordenadas"
+                        placeholder="Ingrese las coordenadas">
+                </div>
+                <div class="form-group">
+                    <label for="precioInmueble" class="form-label"><i class="ion-cash"></i> Precio</label>
+                    <input type="text" class="form-control" id="precioInmueble" name="precioInmueble"
+                        placeholder="Ingrese el precio">
+                </div>
+                <div class="form-group">
+                    <label for="estado" class="form-label"><i class="ion-checkmark-circled"></i> Estado</label>
+                    <input type="text" class="form-control" id="estado" name="estado" placeholder="Ingrese el estado">
+                </div>
+                <div class="form-group">
+                    <label for="idPropietario" class="form-label"><i class="ion-person"></i> Propietario</label>
+                    <select class="form-control" id="idPropietario" name="idPropietario">
+                        <option value="">Seleccione un propietario...</option>
+                        @foreach (var propietario in Model.ListaPropietarios)
+                        {
+                            <option value="@propietario.Id">@propietario.ToString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="idContrato" class="form-label"><i class="ion-document"></i> Contrato</label>
+                    <select class="form-control" id="idContrato" name="idContrato">
+                        <option value="">Seleccione un contrato...</option>
+                        @foreach (var contrato in Model.ListaContratos)
+                        {
+                            <option value="@contrato.Id">@contrato.ToString() </option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary"><i class="ion-ios-checkmark"></i> Guardar</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="tipo">Tipo:</label>
-            <input class="form-control" type="text" id="tipo" name="tipo">
-        </div>
-        <div class="form-group">
-            <label for="cantidadAmbientes">Cantidad de ambientes:</label>
-            <input class="form-control" type="text" id="cantidadAmbientes" name="cantidadAmbientes">
-        </div>
-        <div class="form-group">
-            <label for="coordenadas">Coordenadas:</label>
-            <input class="form-control" type="text" id="coordenadas" name="coordenadas">
-        </div>
-        <div class="form-group">
-            <label for="precioInmueble">Precio:</label>
-            <input class="form-control" type="text" id="precioInmueble" name="precioInmueble">
-        </div>
-        <div class="form-group">
-            <label for="estado">Estado:</label>
-            <input class="form-control" type="text" id="estado" name="estado">
-        </div>
-        <div class="form-group">
-            <label for="idPropietario">Propietario:</label>
-            <select class="form-control" id="idPropietario" name="idPropietario">
-                <option value="">Seleccione un propietario...</option>
-                @foreach (var propietario in Model.ListaPropietarios)
-                {
-                    <option value="@propietario.Id">@propietario.ToString()</option>
-                }
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="idContrato">Contrato:</label>
-            <select class="form-control" id="idContrato" name="idContrato">
-                <option value="">Seleccione un contrato...</option>
-                @foreach (var contrato in Model.ListaContratos)
-                {
-                    <option value="@contrato.Id">@contrato.ToString() </option>
-                }
-            </select>
-        </div>
-
-        <button class="btn btn-primary my-2" type="submit">Guardar</button>
-    </form>
+    </div>
 </div>
-
-
 <style>
     body {
-        background-color: rgb(35, 39, 48);
+       background-color: rgb(35, 39, 48);
     }
 
-    label,
-    h1 {
-        color: white;
+    .card-header {
+        border-bottom: 0;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #555;
     }
 
     .form-control {
-        background-color: #474749;
+        border-color: #E7E7E7;
+    }
+
+    .btn-primary {
+        background-color: #1D77CF;
+        border-color: #1D77CF;
+    }
+
+    .btn-primary:hover {
+        background-color: #0E68C2;
+        border-color: #0E68C2;
     }
 </style>
+
+

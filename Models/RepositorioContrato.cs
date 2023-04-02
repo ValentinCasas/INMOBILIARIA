@@ -153,7 +153,7 @@ public class RepositorioContrato
         Boolean res = false;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"UPDATE contrato SET IdInquilino = @idInquilino, FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion, MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo, WHERE Id = @id";
+            string query = @"UPDATE contrato SET IdInquilino = @idInquilino, FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion, MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", contrato.Id);

@@ -8,19 +8,22 @@
     <form class="container mt-5" asp-action="UpdateContrato" method="post">
 
         <h1> Actualizar Contrato </h1>
-
+        <input type="hidden" id="id" value="@Model.Contrato.Id" name="id">
 
         <div class="form-group">
             <label for="fechaInicio">Fecha de Inicio:</label>
-            <input class="form-control" type="date" value="@Model.Contrato.FechaInicio" id="fechaInicio" name="fechaInicio">
+            <input class="form-control" type="date" value="@Model.Contrato.FechaInicio" id="fechaInicio"
+                name="fechaInicio">
         </div>
         <div class="form-group">
             <label for="fechaFinalizacion">Fecha Finalizacion:</label>
-            <input class="form-control" type="date" value="@Model.Contrato.FechaFinalizacion" id="fechaFinalizacion" name="fechaFinalizacion">
+            <input class="form-control" type="date" value="@Model.Contrato.FechaFinalizacion" id="fechaFinalizacion"
+                name="fechaFinalizacion">
         </div>
         <div class="form-group">
             <label for="montoAlquilerMensual">Monto Alquiler Mensual:</label>
-            <input class="form-control" type="text" value="@Model.Contrato.MontoAlquilerMensual" id="montoAlquilerMensual" name="montoAlquilerMensual">
+            <input class="form-control" type="text" value="@Model.Contrato.MontoAlquilerMensual"
+                id="montoAlquilerMensual" name="montoAlquilerMensual">
         </div>
         <div class="form-group">
             <label for="activo">Activo:</label>
