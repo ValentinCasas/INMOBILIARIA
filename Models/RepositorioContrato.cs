@@ -9,47 +9,47 @@ public class RepositorioContrato
     public RepositorioContrato() { }
 
     public List<Contrato> GetContratos()
-{
-    List<Contrato> contratos = new List<Contrato>();
-    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        string query = @"SELECT c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
+        List<Contrato> contratos = new List<Contrato>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"SELECT c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
                         , i.Nombre, i.Apellido, i.Dni, i.Telefono, i.Id, i.Email
                         FROM contrato c
                         INNER JOIN inquilino i ON c.IdInquilino = i.Id";
-        using (MySqlCommand command = new MySqlCommand(query, connection))
-        {
-            connection.Open();
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                while (reader.Read())
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    Contrato contrato = new Contrato()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
-                        FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]),
-                        MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]),
-                        Activo = Convert.ToBoolean(reader["Activo"]),
-                        IdInquilino = Convert.ToInt32(reader["IdInquilino"]),
-                        Inquilino = new Inquilino()
+                        Contrato contrato = new Contrato()
                         {
-                            Nombre = reader.GetString("Nombre"),
-                            Apellido = reader.GetString("Apellido"),
-                            Dni = reader.GetInt64("Dni"),
-                            Telefono = reader.GetInt64("Telefono"),
-                            Id = reader.GetInt32("Id"),
-                            Email = reader.GetString("Email"),
-                        },
-                    };
+                            Id = Convert.ToInt32(reader["Id"]),
+                            FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
+                            FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]),
+                            MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]),
+                            Activo = Convert.ToBoolean(reader["Activo"]),
+                            IdInquilino = Convert.ToInt32(reader["IdInquilino"]),
+                            Inquilino = new Inquilino()
+                            {
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                                Dni = reader.GetInt64("Dni"),
+                                Telefono = reader.GetInt64("Telefono"),
+                                Id = reader.GetInt32("Id"),
+                                Email = reader.GetString("Email"),
+                            },
+                        };
 
-                    contratos.Add(contrato);
+                        contratos.Add(contrato);
+                    }
                 }
             }
         }
+        return contratos;
     }
-    return contratos;
-}
 
 
     public List<Inquilino> GetInquilinos()
@@ -168,17 +168,20 @@ public class RepositorioContrato
             string query = @"UPDATE contrato SET IdInquilino = @idInquilino, FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion, MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", contrato.Id);
-                command.Parameters.AddWithValue("@idInquilino", contrato.IdInquilino);
-                command.Parameters.AddWithValue("@fechaInicio", contrato.FechaInicio);
-                command.Parameters.AddWithValue("@fechaFinalizacion", contrato.FechaFinalizacion);
-                command.Parameters.AddWithValue("@montoAlquilerMensual", contrato.MontoAlquilerMensual);
-                command.Parameters.AddWithValue("@activo", contrato.Activo);
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                if (contrato.FechaInicio != null && contrato.FechaFinalizacion != null && contrato.MontoAlquilerMensual > 0 && contrato.Activo != null)
                 {
-                    res = true;
+                    command.Parameters.AddWithValue("@id", contrato.Id);
+                    command.Parameters.AddWithValue("@idInquilino", contrato.IdInquilino);
+                    command.Parameters.AddWithValue("@fechaInicio", contrato.FechaInicio);
+                    command.Parameters.AddWithValue("@fechaFinalizacion", contrato.FechaFinalizacion);
+                    command.Parameters.AddWithValue("@montoAlquilerMensual", contrato.MontoAlquilerMensual);
+                    command.Parameters.AddWithValue("@activo", contrato.Activo);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        res = true;
+                    }
                 }
             }
         }

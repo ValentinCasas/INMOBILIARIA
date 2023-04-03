@@ -26,62 +26,98 @@ public class ContratosController : Controller
     [HttpPost]
     public IActionResult Create(Contrato contrato)
     {
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-        int res = repositorioContrato.Alta(contrato);
-        if (res > 0)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+            int res = repositorioContrato.Alta(contrato);
+            if (res > 0)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Create");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(contrato);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Create");
         }
     }
 
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-        Boolean res = repositorioContrato.Baja(id);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+            Boolean res = repositorioContrato.Baja(id);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Ocurrió un error al intentar eliminar el inmueble.";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "No se pudo borrar el inmueble, para mas informacion contactarse con el administrador";
+            return RedirectToAction("Index");
         }
     }
 
     [HttpGet]
     public IActionResult Update(int id)
     {
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-        Contrato contrato = repositorioContrato.ObtenerPorId(id);
-        if (contrato != null)
+        try
         {
-            ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
-            ViewBag.contrato = contrato;
-            return View("Update");
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+            Contrato contrato = repositorioContrato.ObtenerPorId(id);
+            if (contrato != null)
+            {
+                ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
+                ViewBag.contrato = contrato;
+                return View("Update");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Index");
         }
     }
 
     [HttpPost]
     public IActionResult UpdateContrato(Contrato contrato)
     {
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-        Boolean res = repositorioContrato.Actualizar(contrato);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+            Boolean res = repositorioContrato.Actualizar(contrato);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Update");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(contrato);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Update");
         }
     }
 
