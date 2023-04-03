@@ -49,8 +49,13 @@ public class RepositorioInmueble
         List<Inmueble> inmuebles = new List<Inmueble>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT Id, Direccion, Uso, Tipo, CantidadAmbientes, Coordenadas, PrecioInmueble, Estado, IdPropietario, IdContrato
-            FROM inmueble";
+            var query = @"SELECT i.Id, i.Direccion, i.Uso, i.Tipo, i.CantidadAmbientes, i.Coordenadas, i.PrecioInmueble, i.Estado,
+                        p.Nombre, p.Apellido, p.Dni, p.Telefono, p.Id, p.Email,
+                        c.Id, c.FechaInicio, c.Fechafinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
+                        FROM inmueble i
+                        JOIN propietario p ON i.IdPropietario = p.Id
+                        JOIN contrato c ON i.IdContrato = c.Id
+                        ";
 
             using (var command = new MySqlCommand(query, connection))
             {
@@ -69,17 +74,34 @@ public class RepositorioInmueble
                             Coordenadas = reader.GetString(nameof(inmueble.Coordenadas)),
                             PrecioInmueble = reader.GetDecimal(nameof(inmueble.PrecioInmueble)),
                             Estado = reader.GetString(nameof(inmueble.Estado)),
-                            IdPropietario = reader.GetInt32(nameof(inmueble.IdPropietario)),
-                            IdContrato = reader.GetInt32(nameof(inmueble.IdContrato)),
+                            Propietario = new Propietario()
+                            {
+                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                                Dni = reader.GetInt64(nameof(Propietario.Dni)),
+                                Telefono = reader.GetInt64(nameof(Propietario.Telefono)),
+                                Id = reader.GetInt32(nameof(Propietario.Id)),
+                                Email = reader.GetString(nameof(Propietario.Email)),
+                            },
+
+                            Contrato = new Contrato()
+                            {
+                                Id = reader.GetInt32(nameof(Contrato.Id)),
+                                FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                                FechaFinalizacion = reader.GetDateTime(nameof(Contrato.FechaFinalizacion)),
+                                MontoAlquilerMensual = reader.GetDecimal(nameof(Contrato.MontoAlquilerMensual)),
+                                Activo = reader.GetBoolean(nameof(Contrato.Activo)),
+                                IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            },
                         };
                         inmuebles.Add(inmueble);
                     }
                 }
             }
-            connection.Close();
         }
         return inmuebles;
     }
+
 
     public List<Propietario> GetPropietarios()
     {
@@ -203,7 +225,7 @@ public class RepositorioInmueble
             string query = @"UPDATE inmueble SET Direccion = @direccion, Estado = @estado, Uso = @uso, Tipo = @tipo, CantidadAmbientes = @cantidadAmbientes, Coordenadas = @coordenadas, PrecioInmueble = @precioInmueble, IdPropietario = @idPropietario, IdContrato = @idContrato WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                if (inmueble.Direccion != null && inmueble.Estado != null && inmueble.Uso != null && inmueble.Tipo != null && inmueble.CantidadAmbientes > 0  && inmueble.Coordenadas != null && inmueble.PrecioInmueble > 0)
+                if (inmueble.Direccion != null && inmueble.Estado != null && inmueble.Uso != null && inmueble.Tipo != null && inmueble.CantidadAmbientes > 0 && inmueble.Coordenadas != null && inmueble.PrecioInmueble > 0)
                 {
                     command.Parameters.AddWithValue("@id", inmueble.Id);
                     command.Parameters.AddWithValue("@direccion", inmueble.Direccion);

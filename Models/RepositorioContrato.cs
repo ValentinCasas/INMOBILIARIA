@@ -9,36 +9,48 @@ public class RepositorioContrato
     public RepositorioContrato() { }
 
     public List<Contrato> GetContratos()
+{
+    List<Contrato> contratos = new List<Contrato>();
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        List<Contrato> contratos = new List<Contrato>();
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        string query = @"SELECT c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
+                        , i.Nombre, i.Apellido, i.Dni, i.Telefono, i.Id, i.Email
+                        FROM contrato c
+                        INNER JOIN inquilino i ON c.IdInquilino = i.Id";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            var query = @"SELECT Id,IdInquilino,FechaInicio,FechaFinalizacion,MontoAlquilerMensual,Activo
-            FROM contrato";
-            using (var command = new MySqlCommand(query, connection))
+            connection.Open();
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    Contrato contrato = new Contrato()
                     {
-                        Contrato contrato = new Contrato()
+                        Id = Convert.ToInt32(reader["Id"]),
+                        FechaInicio = Convert.ToDateTime(reader["FechaInicio"]),
+                        FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]),
+                        MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]),
+                        Activo = Convert.ToBoolean(reader["Activo"]),
+                        IdInquilino = Convert.ToInt32(reader["IdInquilino"]),
+                        Inquilino = new Inquilino()
                         {
-                            Id = reader.GetInt32(nameof(contrato.Id)),
-                            IdInquilino = reader.GetInt32(nameof(contrato.IdInquilino)),
-                            FechaInicio = reader.GetDateTime(nameof(contrato.FechaInicio)),
-                            FechaFinalizacion = reader.GetDateTime(nameof(contrato.FechaFinalizacion)),
-                            MontoAlquilerMensual = reader.GetDecimal(nameof(contrato.MontoAlquilerMensual)),
-                            Activo = reader.GetBoolean(nameof(contrato.Activo)),
-                        };
-                        contratos.Add(contrato);
-                    }
+                            Nombre = reader.GetString("Nombre"),
+                            Apellido = reader.GetString("Apellido"),
+                            Dni = reader.GetInt64("Dni"),
+                            Telefono = reader.GetInt64("Telefono"),
+                            Id = reader.GetInt32("Id"),
+                            Email = reader.GetString("Email"),
+                        },
+                    };
+
+                    contratos.Add(contrato);
                 }
             }
-            connection.Close();
         }
-        return contratos;
     }
+    return contratos;
+}
+
 
     public List<Inquilino> GetInquilinos()
     {
