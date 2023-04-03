@@ -150,12 +150,13 @@ public class RepositorioInmueble
         int res = 0;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"INSERT INTO Inmueble (Direccion,Uso,Tipo,CantidadAmbientes,Coordenadas, PrecioInmueble, IdPropietario,IdContrato)
-             VALUES (@direccion,@uso,@tipo,@cantidadAmbientes,@coordenadas,@precioInmueble,@idPropietario,@idContrato);
+            string query = @"INSERT INTO Inmueble (Direccion,Estado,Uso,Tipo,CantidadAmbientes,Coordenadas, PrecioInmueble, IdPropietario,IdContrato)
+             VALUES (@direccion,@estado,@uso,@tipo,@cantidadAmbientes,@coordenadas,@precioInmueble,@idPropietario,@idContrato);
         SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
+                command.Parameters.AddWithValue("@estado", inmueble.Estado);
                 command.Parameters.AddWithValue("@uso", inmueble.Uso);
                 command.Parameters.AddWithValue("@tipo", inmueble.Tipo);
                 command.Parameters.AddWithValue("@cantidadAmbientes", inmueble.CantidadAmbientes);
@@ -199,24 +200,28 @@ public class RepositorioInmueble
         Boolean res = false;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"UPDATE inmueble SET Direccion = @direccion, Uso = @uso, Tipo = @tipo, CantidadAmbientes = @cantidadAmbientes, Coordenadas = @coordenadas, PrecioInmueble = @precioInmueble, IdPropietario = @idPropietario, IdContrato = @idContrato WHERE Id = @id";
+            string query = @"UPDATE inmueble SET Direccion = @direccion, Estado = @estado, Uso = @uso, Tipo = @tipo, CantidadAmbientes = @cantidadAmbientes, Coordenadas = @coordenadas, PrecioInmueble = @precioInmueble, IdPropietario = @idPropietario, IdContrato = @idContrato WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", inmueble.Id);
-                command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
-                command.Parameters.AddWithValue("@uso", inmueble.Uso);
-                command.Parameters.AddWithValue("@tipo", inmueble.Tipo);
-                command.Parameters.AddWithValue("@cantidadAmbientes", inmueble.CantidadAmbientes);
-                command.Parameters.AddWithValue("@coordenadas", inmueble.Coordenadas);
-
-                command.Parameters.AddWithValue("@precioInmueble", inmueble.PrecioInmueble);
-                command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
-                command.Parameters.AddWithValue("@idContrato", inmueble.IdContrato);
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                if (inmueble.Direccion != null && inmueble.Estado != null && inmueble.Uso != null && inmueble.Tipo != null && inmueble.CantidadAmbientes > 0  && inmueble.Coordenadas != null && inmueble.PrecioInmueble > 0)
                 {
-                    res = true;
+                    command.Parameters.AddWithValue("@id", inmueble.Id);
+                    command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
+                    command.Parameters.AddWithValue("@estado", inmueble.Estado);
+                    command.Parameters.AddWithValue("@uso", inmueble.Uso);
+                    command.Parameters.AddWithValue("@tipo", inmueble.Tipo);
+                    command.Parameters.AddWithValue("@cantidadAmbientes", inmueble.CantidadAmbientes);
+                    command.Parameters.AddWithValue("@coordenadas", inmueble.Coordenadas);
+
+                    command.Parameters.AddWithValue("@precioInmueble", inmueble.PrecioInmueble);
+                    command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
+                    command.Parameters.AddWithValue("@idContrato", inmueble.IdContrato);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        res = true;
+                    }
                 }
             }
         }

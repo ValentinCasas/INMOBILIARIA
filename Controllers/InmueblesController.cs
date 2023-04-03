@@ -11,9 +11,16 @@ public class InmueblesController : Controller
 
     public IActionResult Index()
     {
-        RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
-        var lista = repositorioInmueble.GetInmuebles();
-        return View(lista);
+        try
+        {
+            RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+            ViewBag.lista = repositorioInmueble.GetInmuebles();
+            return View();
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
     public IActionResult Update()
     {
@@ -23,24 +30,32 @@ public class InmueblesController : Controller
     public IActionResult Create()
     {
         RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
-        var listaPropietarios = repositorioInmueble.GetPropietarios();
-        var listaContratos = repositorioInmueble.GetContratos();
-        var model = new { ListaPropietarios = listaPropietarios, ListaContratos = listaContratos };
-        return View(model);
+        ViewBag.listaPropietarios = repositorioInmueble.GetPropietarios();
+        ViewBag.listaContratos = repositorioInmueble.GetContratos();
+        return View();
     }
 
     [HttpPost]
     public IActionResult Create(Inmueble inmueble)
     {
-        RepositorioInmueble repositorioInquilino = new RepositorioInmueble();
-        int res = repositorioInquilino.Alta(inmueble);
-        if (res > 0)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInmueble repositorioInquilino = new RepositorioInmueble();
+            int res = repositorioInquilino.Alta(inmueble);
+            if (res > 0)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Create");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(inmueble);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Create");
         }
     }
 
@@ -48,15 +63,24 @@ public class InmueblesController : Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
-        Boolean res = repositorioInmueble.Baja(id);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+            Boolean res = repositorioInmueble.Baja(id);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Ocurrió un error al intentar eliminar el inmueble.";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "No se pudo borrar el inmueble, para mas informacion contactarse con el administrador";
+            return RedirectToAction("Index");
         }
     }
 
@@ -64,35 +88,52 @@ public class InmueblesController : Controller
     [HttpGet]
     public IActionResult Update(int id)
     {
-        RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
-        Inmueble inmueble = repositorioInmueble.ObtenerPorId(id);
-        if (inmueble != null)
+        try
         {
+            RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+            Inmueble inmueble = repositorioInmueble.ObtenerPorId(id);
 
-            var listaPropietarios = repositorioInmueble.GetPropietarios();
-            var listaContratos = repositorioInmueble.GetContratos();
-            var model = new { ListaPropietarios = listaPropietarios, ListaContratos = listaContratos, Inmueble = inmueble };
-
-            return View("Update", model);
+            if (inmueble != null)
+            {
+                ViewBag.listaPropietarios = repositorioInmueble.GetPropietarios();
+                ViewBag.listaContratos = repositorioInmueble.GetContratos();
+                ViewBag.inmueble = inmueble;
+                return View("Update");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Index");
         }
     }
 
     [HttpPost]
     public IActionResult UpdateInmueble(Inmueble inmueble)
     {
-        RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
-        Boolean res = repositorioInmueble.Actualizar(inmueble);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+            Boolean res = repositorioInmueble.Actualizar(inmueble);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Update");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(inmueble);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Update");
         }
     }
 

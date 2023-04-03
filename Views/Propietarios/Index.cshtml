@@ -1,8 +1,10 @@
-@model List<Propietario>
 @{
-    List<Propietario> lista = Model;
+    var lista = (IList<Propietario>)ViewBag.lista;
     ViewData["Title"] = "Home Page";
 }
+
+
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -52,7 +54,7 @@
                                                         class="btn btn-outline-secondary"><ion-icon
                                                             name="create-outline"></ion-icon> </a>
                                                     <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger"><ion-icon
+                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
                                                             name="trash-outline"></ion-icon> </a>
                                                 </div>
                                             </td>
@@ -119,10 +121,6 @@
 
 
 <style>
-    body {
-        background-color: rgb(35, 39, 48);
-    }
-
     #add {
         position: sticky;
         bottom: 0;

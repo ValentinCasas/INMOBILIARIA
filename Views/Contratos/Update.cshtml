@@ -1,62 +1,86 @@
 @{
-    ViewData["Title"] = "Crear Contrato";
+    ViewData["Title"] = "Actualizar Contrato";
+      var ListaInquilinos = (IList<Inquilino>)ViewBag.listaInquilinos;
+        var Contrato = ViewBag.contrato;
 }
 
-
-
-<div class="d-flex justify-content-center align-items-center col-lg-5">
-    <form class="container mt-5" asp-action="UpdateContrato" method="post">
-
-        <h1> Actualizar Contrato </h1>
-        <input type="hidden" id="id" value="@Model.Contrato.Id" name="id">
-
-        <div class="form-group">
-            <label for="fechaInicio">Fecha de Inicio:</label>
-            <input class="form-control" type="date" value="@Model.Contrato.FechaInicio" id="fechaInicio"
-                name="fechaInicio">
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card col-lg-6 col-md-8 col-sm-10 mt-5">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Actualizar Contrato</h3>
         </div>
-        <div class="form-group">
-            <label for="fechaFinalizacion">Fecha Finalizacion:</label>
-            <input class="form-control" type="date" value="@Model.Contrato.FechaFinalizacion" id="fechaFinalizacion"
-                name="fechaFinalizacion">
-        </div>
-        <div class="form-group">
-            <label for="montoAlquilerMensual">Monto Alquiler Mensual:</label>
-            <input class="form-control" type="text" value="@Model.Contrato.MontoAlquilerMensual"
-                id="montoAlquilerMensual" name="montoAlquilerMensual">
-        </div>
-        <div class="form-group">
-            <label for="activo">Activo:</label>
-            <input class="form-control" type="text" value="@Model.Contrato.Activo" id="activo" name="activo">
-        </div>
+        <div class="card-body">
+            <form class="container mt-5" asp-action="UpdateContrato" method="post">
+                <input type="hidden" id="id" value="@Contrato.Id" name="id">
+                <div class="form-group my-2">
+                    <label for="fechaInicio" class="form-label"><ion-icon name="calendar-outline"></ion-icon> Fecha de
+                        Inicio</label>
+                    <input type="date" value="@Contrato.FechaInicio.ToString("yyyy-MM-dd")" class="form-control"
+                        id="fechaInicio" name="fechaInicio" placeholder="Ingrese la fecha de inicio">
+                </div>
+                <div class="form-group my-2">
+                    <label for="fechaFinalizacion" class="form-label"><ion-icon name="calendar-sharp"></ion-icon> Fecha
+                        de Finalización</label>
+                    <input type="date" value="@Contrato.FechaFinalizacion.ToString("yyyy-MM-dd")"
+                        class="form-control" id="fechaFinalizacion" name="fechaFinalizacion"
+                        placeholder="Ingrese la fecha de finalización">
+                </div>
+                <div class="form-group my-2">
+                    <label for="montoAlquilerMensual" class="form-label"><ion-icon name="cash-outline"></ion-icon> Monto
+                        Alquiler Mensual</label>
+                    <input type="text" value="@Contrato.MontoAlquilerMensual" class="form-control"
+                        id="montoAlquilerMensual" name="montoAlquilerMensual" placeholder="Ingrese el monto mensual">
+                </div>
+                <div class="form-group my-2">
+                    <label for="activo" class="form-label"><ion-icon name="checkbox-outline"></ion-icon> Activo</label>
+                    <div>
+                        <input type="checkbox" value="true" id="activo" name="activo" class="form-check-input"
+                        @(Contrato.Activo ? "checked" : "")>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label for="idInquilino">Inqilino:</label>
-            <select class="form-control" id="idInquilino" name="idInquilino">
-                <option value="">Seleccione un inquilino...</option>
-                @foreach (var inquilino in Model.ListaInquilinos)
-                {
-                    <option value="@inquilino.Id">@inquilino.ToString()</option>
-                }
-            </select>
-        </div>
+                <div class="form-group my-2">
+                    <label for="idInquilino" class="form-label"><ion-icon name="people-outline"></ion-icon>
+                        Inquilino</label>
+                    <select class="form-control" id="idInquilino" name="idInquilino">
+                        @foreach (var inquilino in ListaInquilinos)
+                        {
+                            @:<option @(inquilino.Id == Contrato.IdInquilino ? "selected" : "") value="@inquilino.Id">@inquilino.ToString()</option>
+                        }
+                    </select>
+                </div>
 
-        <button class="btn btn-primary my-2" type="submit">Guardar</button>
-    </form>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary"><i class="ion-ios-checkmark"></i> Guardar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
-
-
 <style>
-    body {
-        background-color: rgb(35, 39, 48);
+    .card-header {
+        border-bottom: 0;
     }
 
-    label,
-    h1 {
-        color: white;
+    .form-label {
+        font-weight: 500;
+        color: #555;
     }
 
     .form-control {
-        background-color: #474749;
+        border-color: #E7E7E7;
+    }
+
+    .btn-primary {
+        background-color: #1D77CF;
+        border-color: #1D77CF;
+    }
+
+    .btn-primary:hover {
+        background-color: #0E68C2;
+        border-color: #0E68C2;
     }
 </style>
+
+

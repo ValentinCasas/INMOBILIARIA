@@ -12,16 +12,15 @@ public class ContratosController : Controller
     public IActionResult Index()
     {
         RepositorioContrato repositorioContrato = new RepositorioContrato();
-        var lista = repositorioContrato.GetContratos();
-        return View(lista);
+        ViewBag.lista = repositorioContrato.GetContratos();
+        return View();
     }
 
     public IActionResult Create()
     {
         RepositorioContrato repositorioContrato = new RepositorioContrato();
-        var listaInquilinos = repositorioContrato.GetInquilinos();
-        var model = new { ListaInquilinos = listaInquilinos };
-        return View(model);
+        ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
+        return View();
     }
 
     [HttpPost]
@@ -61,11 +60,9 @@ public class ContratosController : Controller
         Contrato contrato = repositorioContrato.ObtenerPorId(id);
         if (contrato != null)
         {
-
-            var listaInquilinos = repositorioContrato.GetInquilinos();
-            var model = new { ListaInquilinos = listaInquilinos, Contrato = contrato};
-
-            return View("Update", model);
+            ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
+            ViewBag.contrato = contrato;
+            return View("Update");
         }
         else
         {

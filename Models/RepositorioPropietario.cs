@@ -118,12 +118,14 @@ public class RepositorioPropietario
     }
 
     public Boolean Actualizar(Propietario propietario)
+{
+    Boolean res = false;
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        Boolean res = false;
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        string query = @"UPDATE propietario SET Nombre = @nombre, Apellido = @apellido, Telefono = @telefono, Dni = @dni, Email = @email WHERE Id = @id";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            string query = @"UPDATE propietario SET Nombre = @nombre, Apellido = @apellido, Telefono = @telefono, Dni = @dni, Email = @email WHERE Id = @id";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            if (propietario.Nombre != null && propietario.Apellido != null && propietario.Dni > 0 && propietario.Telefono > 0 && propietario.Email != null)
             {
                 command.Parameters.AddWithValue("@id", propietario.Id);
                 command.Parameters.AddWithValue("@nombre", propietario.Nombre);
@@ -139,8 +141,10 @@ public class RepositorioPropietario
                 }
             }
         }
-        return res;
     }
+    return res;
+}
+
 
 
 

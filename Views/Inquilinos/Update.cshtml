@@ -1,6 +1,6 @@
-@model Inquilino
+
 @{
-    Inquilino inquilino = Model;
+    var inquilino = ViewBag.inquilino;
     ViewData["Title"] = "Actualizar Inquilino";
 }
 
@@ -22,11 +22,11 @@
                 </div>
                 <div class="form-group">
                     <label for="dni" class="form-label"><i class="ion-card"></i> DNI</label>
-                    <input type="text" value="@inquilino.Dni" class="form-control" id="dni" name="dni" placeholder="Ingrese el DNI">
+                    <input type="number" value="@inquilino.Dni" class="form-control" id="dni" name="dni" placeholder="Ingrese el DNI">
                 </div>
                 <div class="form-group">
                     <label for="telefono" class="form-label"><i class="ion-ios-telephone"></i> Teléfono</label>
-                    <input type="text" value="@inquilino.Telefono" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el teléfono">
+                    <input type="number" value="@inquilino.Telefono" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el teléfono">
                 </div>
                 <div class="form-group">
                     <label for="email" class="form-label"><i class="ion-email"></i> Email</label>
@@ -41,10 +41,7 @@
 </div>
 
 <style>
-    body {
-        background-color: rgb(35, 39, 48);
-    }
-    
+
     .card-header {
         border-bottom: 0;
     }

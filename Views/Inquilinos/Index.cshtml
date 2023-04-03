@@ -1,6 +1,6 @@
-@model List<Inquilino>
+
 @{
-    List<Inquilino> lista = Model;
+    var lista = (IList<Inquilino>)ViewBag.lista;
     ViewData["Title"] = "Lista de Inquilinos";
 }
 <div class="container mt-5">
@@ -53,10 +53,10 @@
                                                         class="btn btn-outline-secondary"><ion-icon
                                                             name="create-outline"></ion-icon>
                                                     </a>
+        
                                                     <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger"><ion-icon
-                                                            name="trash-outline"></ion-icon>
-                                                    </a>
+                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
+                                                            name="trash-outline"></ion-icon> </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -122,9 +122,7 @@
 </div>
 
 <style>
-    body {
-        background-color: rgb(35, 39, 48);
-    }
+
 
     #card-form {
         background-color: #bfbebe;

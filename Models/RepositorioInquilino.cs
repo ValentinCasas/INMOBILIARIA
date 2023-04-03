@@ -125,17 +125,20 @@ public class RepositorioInquilino
             string query = @"UPDATE inquilino SET Nombre = @nombre, Apellido = @apellido, Telefono = @telefono, Dni = @dni, Email = @email WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", inquilino.Id);
-                command.Parameters.AddWithValue("@nombre", inquilino.Nombre);
-                command.Parameters.AddWithValue("@apellido", inquilino.Apellido);
-                command.Parameters.AddWithValue("@dni", inquilino.Dni);
-                command.Parameters.AddWithValue("@telefono", inquilino.Telefono);
-                command.Parameters.AddWithValue("@email", inquilino.Email);
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                if (inquilino.Nombre != null && inquilino.Apellido != null && inquilino.Dni > 0 && inquilino.Telefono > 0 && inquilino.Email != null)
                 {
-                    res = true;
+                    command.Parameters.AddWithValue("@id", inquilino.Id);
+                    command.Parameters.AddWithValue("@nombre", inquilino.Nombre);
+                    command.Parameters.AddWithValue("@apellido", inquilino.Apellido);
+                    command.Parameters.AddWithValue("@dni", inquilino.Dni);
+                    command.Parameters.AddWithValue("@telefono", inquilino.Telefono);
+                    command.Parameters.AddWithValue("@email", inquilino.Email);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        res = true;
+                    }
                 }
             }
         }

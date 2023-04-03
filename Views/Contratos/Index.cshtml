@@ -1,6 +1,5 @@
-@model List<Contrato>
 @{
-    List<Contrato> lista = Model;
+    var lista = (IList<Contrato>)ViewBag.lista;
     ViewData["Title"] = "Lista de Contratos";
 }
 
@@ -57,9 +56,8 @@
                                                             name="create-outline"></ion-icon>
                                                     </a>
                                                     <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger"><ion-icon
-                                                            name="trash-outline"></ion-icon>
-                                                    </a>
+                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
+                                                            name="trash-outline"></ion-icon> </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -131,12 +129,7 @@
 
 
 <style>
-    body {
-        background-color: rgb(35, 39, 48);
-    }
-
     #card-form {
-        background-color: #bfbebe;
         height: 500px;
         overflow-y: scroll;
     }

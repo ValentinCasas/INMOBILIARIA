@@ -14,8 +14,8 @@ public class InquilinosController : Controller
     public IActionResult Index()
     {
         RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
-        var lista = repositorioInquilino.GetInquilinos();
-        return View(lista);
+        ViewBag.lista = repositorioInquilino.GetInquilinos();
+        return View();
     }
 
     public IActionResult Create()
@@ -33,15 +33,24 @@ public class InquilinosController : Controller
     [HttpPost]
     public IActionResult Create(Inquilino inquilino)
     {
-        RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
-        int res = repositorioInquilino.Alta(inquilino);
-        if (res > 0)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
+            int res = repositorioInquilino.Alta(inquilino);
+            if (res > 0)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Create");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(inquilino);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Create");
         }
     }
 
@@ -49,45 +58,72 @@ public class InquilinosController : Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
-        Boolean res = repositorioInquilino.Baja(id);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
+            Boolean res = repositorioInquilino.Baja(id);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Ocurrió un error al intentar eliminar el Inquilino.";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "No se pudo borrar el Inquilino, probablemente este asociado a algun contrato";
+            return RedirectToAction("Index");
         }
     }
 
     [HttpGet]
     public IActionResult Update(int id)
     {
-        RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
-        Inquilino inquilino = repositorioInquilino.ObtenerPorId(id);
-        if (inquilino != null)
+        try
         {
-            return View("Update", inquilino);
+            RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
+            ViewBag.inquilino = repositorioInquilino.ObtenerPorId(id);
+            if (ViewBag.inquilino != null)
+            {
+                return View("Update");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(id);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Index");
         }
     }
 
     [HttpPost]
     public IActionResult UpdateInquilino(Inquilino inquilino)
     {
-        RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
-        Boolean res = repositorioInquilino.Actualizar(inquilino);
-        if (res == true)
+        try
         {
-            return RedirectToAction("index");
+            RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
+            Boolean res = repositorioInquilino.Actualizar(inquilino);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Update");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return View(inquilino);
+            TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+            return RedirectToAction("Update");
         }
     }
 
