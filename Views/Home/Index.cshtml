@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="row justify-content-between">
-        <div class="col-lg-6">
+        <div class="col-lg-6" id="data">
             <h1 class="text-center mt-5">Agencia Inmobiliaria</h1>
             <p class="lead">Encuentra tu hogar soñado con nosotros. Ofrecemos una amplia gama de propiedades en diversas
                 ubicaciones para satisfacer tus necesidades y preferencias. Nuestros agentes con experiencia están
@@ -113,7 +113,7 @@
         };
     }
 
-    setInterval(changeBackgroundImage, 5000);
+    setInterval(changeBackgroundImage, 7000);
 </script>
 
 
@@ -125,12 +125,19 @@
         height: 100vh !important;
     }
 
+    #data {
+        background-color: #e1e4eb10;
+        height: 300px;
+        border-radius:10px;
+    }
+
     h1 {
         text-shadow: .5px .5px 0 #cfcccc, -1px -1px 0 #cfcccc, 1px -1px 0 #cfcccc, -1px 1px 0 #cfcccc;
     }
 
     .lead {
-        text-shadow: .5px .5px 0 #ffffff, -1px -1px 0 #fffdfd, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+        color:#000;
+        /*text-shadow: .5px .5px 0 #ffffffa6, -1px -1px 0 #ffffffa6, 1px -1px 0 #ffffffa6, -1px 1px 0 #ffffffa6;*/
     }
 
     #background-image {
