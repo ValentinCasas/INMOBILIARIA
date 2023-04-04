@@ -130,7 +130,13 @@
             });
         });
 
-
+window.addEventListener('load', () => {
+  const animatedElements = document.querySelectorAll('.animated');
+  animatedElements.forEach(element => {
+    element.style.opacity = 1;
+    element.style.transform = 'translateX(0)';
+  });
+});
 
     </script>
 
@@ -146,6 +152,12 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
         background-position: top left;
+    }
+
+    .animated {
+        opacity: 0;
+        transform: translateX(-1000%);
+        transition: all 1.5s ease;
     }
 
     a {
