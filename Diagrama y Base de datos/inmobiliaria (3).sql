@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-04-2023 a las 05:46:49
+-- Tiempo de generación: 04-04-2023 a las 07:57:39
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -136,6 +136,13 @@ CREATE TABLE `pago` (
   `IdContrato` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `pago`
+--
+
+INSERT INTO `pago` (`Id`, `NumDePago`, `FechaDePago`, `Importe`, `IdContrato`) VALUES
+(4, 1, '2023-04-13 00:00:00', '5000', 15);
+
 -- --------------------------------------------------------
 
 --
@@ -234,7 +241,7 @@ ALTER TABLE `inquilino`
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
