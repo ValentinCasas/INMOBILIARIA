@@ -15,36 +15,71 @@
 <body>
 
     <header>
-        <nav
-            class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 py-0">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">INMOBILIARIA</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="/">INMOBILIARIA</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="/Propietarios" role="button">Propietarios</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0 mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Propietarios">
+                                <ion-icon name="people"></ion-icon> Propietarios
+                            </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a class=" mx-4" href="/Inquilinos" role="button">Inquilinos</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Inquilinos">
+                                <ion-icon name="person"></ion-icon> Inquilinos
+                            </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="/Inmuebles" role="button">Inmuebles</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Inmuebles">
+                                <ion-icon name="home"></ion-icon> Inmuebles
+                            </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a class="  mx-4" href="/Contratos" role="button">Contratos</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Contratos">
+                                <ion-icon name="document"></ion-icon> Contratos
+                            </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="/Pagos" role="button">Pagos</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Pagos">
+                                <ion-icon name="cash"></ion-icon> Pagos
+                            </a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav" >
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Usuarios/Profile/@User.FindFirst("EmpleadoId").Value">
+                                    Perfil
+                                </a>
+                            </li>
+                            <li class="nav-item" >
+                                <a class="nav-link" href="/salir">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Usuarios/Index">
+                                    <ion-icon name="people-circle"></ion-icon> Usuarios
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+
+
 
     @if (TempData["Error"] != null)
     {
@@ -53,6 +88,19 @@
                 <ion-icon name="close"></ion-icon>
             </button>
             @TempData["Error"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert" role="alert">
+            <button type="button" class="closeError" data-dismiss="alert" aria-label="Close">
+                <ion-icon name="close"></ion-icon>
+            </button>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <span>@error.ErrorMessage</span>
+            }
         </div>
     }
 
@@ -130,13 +178,13 @@
             });
         });
 
-window.addEventListener('load', () => {
-  const animatedElements = document.querySelectorAll('.animated');
-  animatedElements.forEach(element => {
-    element.style.opacity = 1;
-    element.style.transform = 'translateX(0)';
-  });
-});
+        window.addEventListener('load', () => {
+            const animatedElements = document.querySelectorAll('.animated');
+            animatedElements.forEach(element => {
+                element.style.opacity = 1;
+                element.style.transform = 'translateX(0)';
+            });
+        });
 
     </script>
 
@@ -177,6 +225,10 @@ window.addEventListener('load', () => {
 
     nav li:hover {
         background-color: #70a5dade;
+    }
+
+    #logout:hover {
+        background-color: #da7070de;
     }
 
     .navbar {

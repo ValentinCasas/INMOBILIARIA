@@ -1,4 +1,10 @@
-﻿@{
+
+@{
+	ViewData["Title"] = "Acceso de usuarios";
+}
+
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -15,31 +21,7 @@
             </p>
         </div>
 
-         @if (User.IsInRole("Administrador"))
-        {
-                <div class="col-lg-5 text-center">
-                <h2 class="mt-5">¡BIENVENIDO ADMIN!</h2>
-                <p class="lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios de estar
-                    logueado en nuestra plataforma inmobiliaria.</p>
-
-                 <a class="btn btn-primary mt-3" href="/Usuarios/Index" role="button">Explorar empleados</a>
-            </div>
-        }
-
-         @if (User.IsInRole("Empleado"))
-        {
-                <div class="col-lg-5 text-center">
-                <h2 class="mt-5">¡BIENVENIDO!</h2>
-                <p class="lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios de estar
-                    logueado en nuestra plataforma inmobiliaria.</p>
-                <a href="" class="btn btn-primary mt-3">Explorar propiedades</a>
-            </div>
-        }
-
-        @if (!User.Identity.IsAuthenticated)
-        {
-            await Html.RenderPartialAsync("_Login", new LoginView());
-        }
+        @await Html.PartialAsync("_Login")
 
     </div>
 </div>
