@@ -41,7 +41,6 @@ public class UsuariosController : Controller
     }
 
 
-
     [Authorize]
     [HttpGet]
     public ActionResult Profile(int id)
@@ -153,8 +152,6 @@ public class UsuariosController : Controller
         return RedirectToAction("Update", new { id = usuario.Id });
 
     }
-
-
 
 
     [Authorize(Policy = "Administrador")]
@@ -344,13 +341,6 @@ public class UsuariosController : Controller
                     return View();
                 }
 
-                // Si el usuario tiene el rol de administrador, se autenticará sin aplicar la función de hash a su contraseña.
-                if (e.RolNombre == enRoles.Administrador.ToString() && e.Clave != login.Clave)
-                {
-                    ModelState.AddModelError("", "El email o la clave no son correctos");
-                    TempData["returnUrl"] = returnUrl;
-                    return View();
-                }
 
                 // Si el usuario no tiene el rol de administrador, se aplicará la función de hash a su contraseña y se verificará su autenticación.
                 if (e.RolNombre != enRoles.Administrador.ToString())

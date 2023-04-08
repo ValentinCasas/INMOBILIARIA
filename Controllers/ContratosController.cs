@@ -29,6 +29,7 @@ public class ContratosController : Controller
     {
         RepositorioContrato repositorioContrato = new RepositorioContrato();
         ViewBag.lista = repositorioContrato.GetContratos();
+        ViewBag.pagos = repositorioContrato.GetPagos();
         return View();
     }
 

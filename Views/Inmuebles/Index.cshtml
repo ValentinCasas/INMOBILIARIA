@@ -68,12 +68,16 @@
                                             <td colspan="8">
                                                 <div class="collapse" id="fila-@item.Id">
                                                     <div class="card card-body">
-                                                        <h3>Propietario:</h3>
-                                                        <p>Nombre: @item.Propietario.Nombre </p>
-                                                        <p>Apellido: @item.Propietario.Apellido </p>
-                                                        <p>Dni: @item.Propietario.Dni </p>
-                                                        <p>Telefono: @item.Propietario.Telefono </p>
-                                                        <p>Email: @item.Propietario.Email </p>
+                                                        <details>
+                                                            <summary>Propietario</summary>
+                                                            <div>
+                                                                <p>Nombre: @item.Propietario.Nombre </p>
+                                                                <p>Apellido: @item.Propietario.Apellido </p>
+                                                                <p>Dni: @item.Propietario.Dni </p>
+                                                                <p>Telefono: @item.Propietario.Telefono </p>
+                                                                <p>Email: @item.Propietario.Email </p>
+                                                            </div>
+                                                        </details>
                                                     </div>
                                                 </div>
                                             </td>
@@ -142,6 +146,41 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
         background-position: top left;
+    }
+
+    summary {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.2s ease;
+    }
+
+    summary:hover {
+        background-color: #ddd;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    /* Estilo del contenido */
+    details>div {
+        border: 1px solid #ddd;
+        border-top: none;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+
+    details[open]>div {
+        border-top: 1px solid #ddd;
+    }
+
+    details:hover>div {
+        background-color: #f5f5f5;
     }
 
     #card-form {

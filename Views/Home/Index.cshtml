@@ -15,24 +15,27 @@
             </p>
         </div>
 
-         @if (User.IsInRole("Administrador"))
+        @if (User.IsInRole("Administrador"))
         {
-                <div class="col-lg-5 text-center">
-                <h2 class="mt-5">¡BIENVENIDO ADMIN!</h2>
-                <p class="lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios de estar
+          <div class="card p-5 col-md-6 mt-4 shadow" style="border-radius: 20px;">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">¡BIENVENIDO ADMIN!</h2>
+                    <p class="card-text lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios de estar
                     logueado en nuestra plataforma inmobiliaria.</p>
-
-                 <a class="btn btn-primary mt-3" href="/Usuarios/Index" role="button">Explorar empleados</a>
+                    <a href="/Usuarios/Index" class="btn btn-primary mt-3">Explorar empleados</a>
+                </div>
             </div>
         }
 
-         @if (User.IsInRole("Empleado"))
+        @if (User.IsInRole("Empleado"))
         {
-                <div class="col-lg-5 text-center">
-                <h2 class="mt-5">¡BIENVENIDO!</h2>
-                <p class="lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios de estar
-                    logueado en nuestra plataforma inmobiliaria.</p>
-                <a href="" class="btn btn-primary mt-3">Explorar propiedades</a>
+            <div class="card p-5 col-md-6 mt-4 shadow" style="border-radius: 20px;">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">¡BIENVENIDO!</h2>
+                    <p class="card-text lead">Gracias por ser parte de nuestra comunidad. Disfruta de todos los beneficios
+                        de estar logueado en nuestra plataforma inmobiliaria.</p>
+                    <a href="#" class="btn btn-primary mt-3">Explorar propiedades</a>
+                </div>
             </div>
         }
 
@@ -85,6 +88,48 @@
         background-color: #e1e4eb10;
         height: 300px;
         border-radius: 10px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+
+    }
+
+    .card-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card-text {
+        font-size: 1.2rem;
+        color: #555;
+    }
+
+    .btn {
+        background-color: #45B6C7;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        padding: 10px 30px;
+        border-radius: 30px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background-color: #fff;
+        border: 1px solid #45B6C7;
+        color: #45B6C7;
+        cursor: pointer;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
     h1 {

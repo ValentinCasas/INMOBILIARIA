@@ -1,5 +1,6 @@
 @{
     var lista = (IList<Contrato>)ViewBag.lista;
+    var pagos = (IList<Pago>)ViewBag.pagos;
     ViewData["Title"] = "Lista de Contratos";
 }
 
@@ -34,7 +35,6 @@
                                         <th>FechaFinalizacion</th>
                                         <th>MontoAlquilerMensual</th>
                                         <th>Activo</th>
-                                        <th>Pagos</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -46,7 +46,6 @@
                                             <td>@item.FechaFinalizacion</td>
                                             <td>@item.MontoAlquilerMensual</td>
                                             <td>@item.Activo</td>
-                                            <td>pagos</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Acciones">
                                                     <a href="@Url.Action("Update", new { id = item.Id })"
@@ -60,24 +59,43 @@
                                             </td>
                                         </tr>
                                         <tr class="hiddenRow">
-                                            <td colspan="7">
+                                            <td colspan="5">
                                                 <div class="collapse" id="fila-@item.Id">
-                                                    <div class="card card-body">
-                                                        <h3>Inquilino:</h3>
-                                                        <p>Nombre: @item.Inquilino.Nombre </p>
-                                                        <p>Apellido @item.Inquilino.Apellido</p> 
-                                                        <p>Dni: @item.Inquilino.Dni</p> 
-                                                        <p>Telefono: @item.Inquilino.Telefono</p> 
-                                                        <p>Email: @item.Inquilino.Email</p>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <details>
+                                                                <summary>Inquilino:</summary>
+                                                                <div>
+                                                                <p>Nombre: @item.Inquilino.Nombre </p>
+                                                                <p>Apellido @item.Inquilino.Apellido</p>
+                                                                <p>Dni: @item.Inquilino.Dni</p>
+                                                                <p>Telefono: @item.Inquilino.Telefono</p>
+                                                                <p>Email: @item.Inquilino.Email</p>
+                                                                </div>
+                                                            </details>
 
-                                                        <h3>Inmueble:</h3>
-                                                        <p>Direccion: @item.Inmueble.Direccion </p>
-                                                        <p>Uso @item.Inmueble.Uso</p> 
-                                                        <p>Tipo: @item.Inmueble.Tipo</p> 
-                                                        <p>Ambientes: @item.Inmueble.CantidadAmbientes</p> 
-                                                        <p>Coordenadas: @item.Inmueble.Coordenadas</p>
-                                                        <p>Precio: @item.Inmueble.PrecioInmueble</p>
-                                                        <p>Estado: @item.Inmueble.Estado</p>
+                                                            <details>
+                                                                <summary>Inmueble:</summary>
+                                                                <div>
+                                                                <p>Direccion: @item.Inmueble.Direccion </p>
+                                                                <p>Uso @item.Inmueble.Uso</p>
+                                                                <p>Tipo: @item.Inmueble.Tipo</p>
+                                                                <p>Ambientes: @item.Inmueble.CantidadAmbientes</p>
+                                                                <p>Coordenadas: @item.Inmueble.Coordenadas</p>
+                                                                <p>Precio: @item.Inmueble.PrecioInmueble</p>
+                                                                <p>Estado: @item.Inmueble.Estado</p>
+                                                                </div>
+                                                            </details>
+                                                            <details>
+                                                                <summary>Pagos:</summary>
+                                                                @foreach (var pago in pagos.Where(p => p.IdContrato == item.Id))
+                                                                {
+                                                                    <div>
+                                                                        <p>@pago.ToString()</p>
+                                                                    </div>
+                                                                }
+                                                            </details>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -140,6 +158,69 @@
 
 
 <style>
+    summary {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.2s ease;
+    }
+
+    summary:hover {
+        background-color: #ddd;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    /* Estilo del contenido */
+    details>div {
+        border: 1px solid #ddd;
+        border-top: none;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+
+    details[open]>div {
+        border-top: 1px solid #ddd;
+    }
+
+    details:hover>div {
+        background-color: #f5f5f5;
+    }
+
+    .collapse {
+        display: none;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-body p {
+        display: inline-block;
+        margin-right: 1rem;
+    }
+
+    .card-body h3 {
+        margin-top: 0;
+    }
+
+    .collapse.show {
+        display: block;
+    }
+
     #card-form {
         background-color: #ada8a85c;
         height: 500px;

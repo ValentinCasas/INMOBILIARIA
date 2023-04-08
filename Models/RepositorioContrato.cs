@@ -113,6 +113,50 @@ public class RepositorioContrato
         return contratos;
     }
 
+    public List<Pago> GetPagos()
+    {
+        List<Pago> pagos = new List<Pago>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.Id, i.NumDePago, i.FechaDePago, i.Importe, i.IdContrato,
+                        c.Id, c.FechaInicio, c.Fechafinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
+                        FROM pago i
+                        JOIN contrato c ON i.IdContrato = c.Id
+                        ";
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Pago pago = new Pago()
+                        {
+                            Id = reader.GetInt32(nameof(pago.Id)),
+                            NumDePago = reader.GetInt32(nameof(pago.NumDePago)),
+                            FechaDePago = reader.GetDateTime(nameof(pago.FechaDePago)),
+                            Importe = reader.GetDecimal(nameof(pago.Importe)),
+                            IdContrato = reader.GetInt32(nameof(pago.IdContrato)),
+
+                            Contrato = new Contrato()
+                            {
+                                Id = reader.GetInt32(nameof(Contrato.Id)),
+                                FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                                FechaFinalizacion = reader.GetDateTime(nameof(Contrato.FechaFinalizacion)),
+                                MontoAlquilerMensual = reader.GetDecimal(nameof(Contrato.MontoAlquilerMensual)),
+                                Activo = reader.GetBoolean(nameof(Contrato.Activo)),
+                                IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            },
+                        };
+                        pagos.Add(pago);
+                    }
+                }
+            }
+        }
+        return pagos;
+    }
+
 
     public List<Inquilino> GetInquilinos()
     {

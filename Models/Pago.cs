@@ -19,4 +19,10 @@ public class Pago
     public DateTime FechaDePago { get; set; }
     public decimal Importe { get; set; }
 
+    public override string ToString()
+    {
+        return $"NumDePago: {NumDePago}, FechaDePago: {FechaDePago}, Importe: {Importe}";
+    }
+
+
 }

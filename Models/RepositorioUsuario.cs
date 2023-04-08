@@ -138,6 +138,42 @@ public class RepositorioUsuario
         return usuarios;
     }
 
+    public List<Usuario> BuscarUsuariosQuery(string query)
+    {
+        List<Usuario> usuarios = new List<Usuario>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var searchQuery = $@"SELECT Id,Dni,Nombre,Apellido,Edad,Email, Clave, AvatarUrl,Rol
+        FROM usuario
+        WHERE Nombre LIKE '%{query}%' OR Apellido LIKE '%{query}%'";
+            using (var command = new MySqlCommand(searchQuery, connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Usuario usuario = new Usuario()
+                        {
+                            Id = reader.GetInt32(nameof(usuario.Id)),
+                            Dni = reader.GetInt64(nameof(usuario.Dni)),
+                            Nombre = reader.GetString(nameof(usuario.Nombre)),
+                            Apellido = reader.GetString(nameof(usuario.Apellido)),
+                            Edad = reader.GetInt32(nameof(usuario.Edad)),
+                            Email = reader.GetString(nameof(usuario.Email)),
+                            Clave = reader.GetString(nameof(usuario.Clave)),
+                            AvatarUrl = reader.GetString(nameof(usuario.AvatarUrl)),
+                            Rol = reader.GetInt32(nameof(usuario.Rol)),
+                        };
+                        usuarios.Add(usuario);
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return usuarios;
+    }
+
 
     public Usuario ObtenerPorEmail(string email)
     {
@@ -175,41 +211,41 @@ public class RepositorioUsuario
         return usuario;
     }
 
-public List<Usuario> ObtenerPorEmailList(string email)
-{
-    List<Usuario> usuarios = new List<Usuario>();
-    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    public List<Usuario> ObtenerPorEmailList(string email)
     {
-        string query = @"SELECT
+        List<Usuario> usuarios = new List<Usuario>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"SELECT
 				Id, Nombre, Apellido, AvatarUrl, Dni, Edad, Email, Clave, Rol FROM usuario
 				WHERE Email=@email";
-        using (MySqlCommand command = new MySqlCommand(query, connection))
-        {
-            command.Parameters.AddWithValue("@email", email);
-            connection.Open();
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                while (reader.Read())
+                command.Parameters.AddWithValue("@email", email);
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    Usuario usuario = new Usuario();
-                    usuario.Id = reader.GetInt32("Id");
-                    usuario.Nombre = reader.GetString("Nombre");
-                    usuario.Apellido = reader.GetString("Apellido");
-                    usuario.Dni = reader.GetInt64("Dni");
-                    usuario.Edad = reader.GetInt32("Edad");
-                    usuario.AvatarUrl = reader.GetString("AvatarUrl");
-                    usuario.Email = reader.GetString("Email");
-                    usuario.Clave = reader.GetString("Clave");
-                    usuario.Rol = reader.GetInt32("Rol");
+                    while (reader.Read())
+                    {
+                        Usuario usuario = new Usuario();
+                        usuario.Id = reader.GetInt32("Id");
+                        usuario.Nombre = reader.GetString("Nombre");
+                        usuario.Apellido = reader.GetString("Apellido");
+                        usuario.Dni = reader.GetInt64("Dni");
+                        usuario.Edad = reader.GetInt32("Edad");
+                        usuario.AvatarUrl = reader.GetString("AvatarUrl");
+                        usuario.Email = reader.GetString("Email");
+                        usuario.Clave = reader.GetString("Clave");
+                        usuario.Rol = reader.GetInt32("Rol");
 
-                    usuarios.Add(usuario);
+                        usuarios.Add(usuario);
+                    }
                 }
-            }
 
+            }
         }
+        return usuarios;
     }
-    return usuarios;
-}
 
     public Usuario ObtenerPorId(int id)
     {

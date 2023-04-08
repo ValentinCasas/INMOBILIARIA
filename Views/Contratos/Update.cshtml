@@ -43,7 +43,7 @@
                 <div class="form-group my-2">
                     <label for="idInquilino" class="form-label"><ion-icon name="people-outline"></ion-icon>
                         Inquilino</label>
-                    <select class="form-control" id="idInquilino" name="idInquilino">
+                    <select class="form-control select2" id="idInquilino" name="idInquilino">
                         @foreach (var inquilino in ListaInquilinos)
                         {
                             @:<option @(inquilino.Id == Contrato.IdInquilino ? "selected" : "") value="@inquilino.Id">@inquilino.ToString()</option>
@@ -53,7 +53,7 @@
 <div class="form-group my-2">
                     <label for="idInmueble" class="form-label"><ion-icon name="people-outline"></ion-icon>
                         Inmueble</label>
-                    <select class="form-control" id="idInmueble" name="idInmueble">
+                    <select class="form-control select2" id="idInmueble" name="idInmueble">
                         @foreach (var inmueble in ListaInmuebles)
                         {
                               @:<option @(inmueble.Id == Contrato.IdInmueble ? "selected" : "") value="@inmueble.Id">@inmueble.ToString()</option>

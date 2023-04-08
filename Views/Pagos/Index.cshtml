@@ -59,13 +59,17 @@
                                         <tr class="hiddenRow">
                                             <td colspan="8">
                                                 <div class="collapse" id="fila-@item.Id">
-                                                    <div class="card card-body">               
-                                                        <h3>Contrato:</h3>
+                                                    <div class="card card-body">   
+                                                        <details>            
+                                                        <summary>Contrato:</summary>
+                                                        <div>
                                                         <p>Fecha inicial: @item.Contrato.FechaInicio </p>
                                                         <p>Fecha Final: @item.Contrato.FechaFinalizacion </p>
                                                         <p>Monto mensual: @item.Contrato.MontoAlquilerMensual </p>
                                                         <p>Activo: @item.Contrato.Activo </p>
                                                         <p>Id Inquilino: @item.Contrato.IdInquilino </p>
+</div>
+                                                        </details>
                                                     </div>
                                                 </div>
                                             </td>
@@ -134,6 +138,41 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
         background-position: top left;
+    }
+
+    summary {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 1rem;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.2s ease;
+    }
+
+    summary:hover {
+        background-color: #ddd;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    /* Estilo del contenido */
+    details>div {
+        border: 1px solid #ddd;
+        border-top: none;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+
+    details[open]>div {
+        border-top: 1px solid #ddd;
+    }
+
+    details:hover>div {
+        background-color: #f5f5f5;
     }
 
     #card-form {
