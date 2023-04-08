@@ -2,7 +2,6 @@
 
     ViewData["Title"] = "Actualizar Inmueble";
       var ListaPropietarios = (IList<Propietario>)ViewBag.listaPropietarios;
-    var ListaContratos = (IList<Contrato>)ViewBag.listaContratos;
         var Inmueble = ViewBag.inmueble;
 }
 
@@ -60,15 +59,6 @@
                         @foreach (var propietario in ListaPropietarios)
                         {
                              @:<option value="@propietario.Id" @(propietario.Id == @Inmueble.IdPropietario ? "selected" : "")> @propietario.ToString() </option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="idContrato" class="form-label"><i class="ion-document"></i> Contrato</label>
-                    <select class="form-control" id="idContrato" name="idContrato">
-                        @foreach (var contrato in ListaContratos)
-                        {
-                            @:<option value="@contrato.Id" @(contrato.Id == @Inmueble.IdContrato ? "selected" : "")> @contrato.ToString() </option>
                         }
                     </select>
                 </div>

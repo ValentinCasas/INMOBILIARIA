@@ -15,7 +15,7 @@ public class Pago
     [ForeignKey(nameof(IdContrato))]
     public Contrato Contrato { get; set; }
 
-    public int NumDePago { get; set; }
+    public int NumDePago { get; set; } = 0;
     public DateTime FechaDePago { get; set; }
     public decimal Importe { get; set; }
 

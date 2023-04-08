@@ -32,7 +32,7 @@ public class RepositorioPago
                             NumDePago = reader.GetInt32(nameof(pago.NumDePago)),
                             FechaDePago = reader.GetDateTime(nameof(pago.FechaDePago)),
                             Importe = reader.GetDecimal(nameof(pago.Importe)),
-                        
+
                             Contrato = new Contrato()
                             {
                                 Id = reader.GetInt32(nameof(Contrato.Id)),
@@ -85,6 +85,9 @@ public class RepositorioPago
 
     public int Alta(Pago pago)
     {
+
+        List<Pago> listaPagosPorIdContrato = ObtenerPagosPorIdContrato(pago.IdContrato);
+
         int res = 0;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
@@ -93,7 +96,7 @@ public class RepositorioPago
         SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@numDePago", pago.NumDePago);
+                command.Parameters.AddWithValue("@numDePago", listaPagosPorIdContrato.Count() + 1);
                 command.Parameters.AddWithValue("@fechaDePago", pago.FechaDePago);
                 command.Parameters.AddWithValue("@importe", pago.Importe);
                 command.Parameters.AddWithValue("@idContrato", pago.IdContrato);
@@ -127,76 +130,114 @@ public class RepositorioPago
         return res;
     }
 
-public Pago ObtenerPorId(int id)
-{
-    Pago pago = null;
-
-    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    public Pago ObtenerPorId(int id)
     {
-        var query = @"SELECT i.Id, i.NumDePago, i.FechaDePago, i.Importe, i.IdContrato,
+        Pago pago = null;
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.Id, i.NumDePago, i.FechaDePago, i.Importe, i.IdContrato,
                     c.Id, c.FechaInicio, c.Fechafinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
                     FROM pago i
                     JOIN contrato c ON i.IdContrato = c.Id
                     WHERE i.Id = @id";
 
-        using (var command = new MySqlCommand(query, connection))
-        {
-            command.Parameters.AddWithValue("@id", id);
-
-            connection.Open();
-            using (var reader = command.ExecuteReader())
+            using (var command = new MySqlCommand(query, connection))
             {
-                if (reader.Read())
+                command.Parameters.AddWithValue("@id", id);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    pago = new Pago()
+                    if (reader.Read())
                     {
-                        Id = reader.GetInt32(nameof(Pago.Id)),
-                        NumDePago = reader.GetInt32(nameof(Pago.NumDePago)),
-                        FechaDePago = reader.GetDateTime(nameof(Pago.FechaDePago)),
-                        Importe = reader.GetDecimal(nameof(Pago.Importe)),
-                    
-                        Contrato = new Contrato()
+                        pago = new Pago()
                         {
-                            Id = reader.GetInt32(nameof(Contrato.Id)),
-                            FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
-                            FechaFinalizacion = reader.GetDateTime(nameof(Contrato.FechaFinalizacion)),
-                            MontoAlquilerMensual = reader.GetDecimal(nameof(Contrato.MontoAlquilerMensual)),
-                            Activo = reader.GetBoolean(nameof(Contrato.Activo)),
-                            IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
-                        },
-                    };
+                            Id = reader.GetInt32(nameof(Pago.Id)),
+                            NumDePago = reader.GetInt32(nameof(Pago.NumDePago)),
+                            FechaDePago = reader.GetDateTime(nameof(Pago.FechaDePago)),
+                            Importe = reader.GetDecimal(nameof(Pago.Importe)),
+
+                            Contrato = new Contrato()
+                            {
+                                Id = reader.GetInt32(nameof(Contrato.Id)),
+                                FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                                FechaFinalizacion = reader.GetDateTime(nameof(Contrato.FechaFinalizacion)),
+                                MontoAlquilerMensual = reader.GetDecimal(nameof(Contrato.MontoAlquilerMensual)),
+                                Activo = reader.GetBoolean(nameof(Contrato.Activo)),
+                                IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            },
+                        };
+                    }
                 }
             }
         }
+
+        return pago;
     }
 
-    return pago;
-}
+    public List<Pago> ObtenerPagosPorIdContrato(int idContrato)
+    {
+        List<Pago> pagos = new List<Pago>();
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT p.Id, p.NumDePago, p.FechaDePago, p.Importe, p.IdContrato,
+                    c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino
+                    FROM pago p
+                    JOIN contrato c ON p.IdContrato = c.Id
+                    WHERE p.IdContrato = @idContrato";
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@idContrato", idContrato);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Pago pago = new Pago()
+                        {
+                            Id = reader.GetInt32(nameof(Pago.Id)),
+                            NumDePago = reader.GetInt32(nameof(Pago.NumDePago)),
+                            FechaDePago = reader.GetDateTime(nameof(Pago.FechaDePago)),
+                            Importe = reader.GetDecimal(nameof(Pago.Importe)),
+
+                            Contrato = new Contrato()
+                            {
+                                Id = reader.GetInt32(nameof(Contrato.Id)),
+                                FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                                FechaFinalizacion = reader.GetDateTime(nameof(Contrato.FechaFinalizacion)),
+                                MontoAlquilerMensual = reader.GetDecimal(nameof(Contrato.MontoAlquilerMensual)),
+                                Activo = reader.GetBoolean(nameof(Contrato.Activo)),
+                                IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            },
+                        };
+                        pagos.Add(pago);
+                    }
+                }
+            }
+        }
+
+        return pagos;
+    }
 
 
-
-/*
-    public Boolean Actualizar(Inmueble inmueble)
+    public Boolean Actualizar(Pago pago)
     {
         Boolean res = false;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"UPDATE inmueble SET Direccion = @direccion, Estado = @estado, Uso = @uso, Tipo = @tipo, CantidadAmbientes = @cantidadAmbientes, Coordenadas = @coordenadas, PrecioInmueble = @precioInmueble, IdPropietario = @idPropietario, IdContrato = @idContrato WHERE Id = @id";
+            string query = @"UPDATE pago SET IdContrato = @idContrato, Importe = @importe, FechaDePago = @fechaDePago WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                if (inmueble.Direccion != null && inmueble.Estado != null && inmueble.Uso != null && inmueble.Tipo != null && inmueble.CantidadAmbientes > 0 && inmueble.Coordenadas != null && inmueble.PrecioInmueble > 0)
-                {
-                    command.Parameters.AddWithValue("@id", inmueble.Id);
-                    command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
-                    command.Parameters.AddWithValue("@estado", inmueble.Estado);
-                    command.Parameters.AddWithValue("@uso", inmueble.Uso);
-                    command.Parameters.AddWithValue("@tipo", inmueble.Tipo);
-                    command.Parameters.AddWithValue("@cantidadAmbientes", inmueble.CantidadAmbientes);
-                    command.Parameters.AddWithValue("@coordenadas", inmueble.Coordenadas);
+     
+                    command.Parameters.AddWithValue("@id", pago.Id);
+                    command.Parameters.AddWithValue("@importe", pago.Importe);
+                    command.Parameters.AddWithValue("@fechaDePago", pago.FechaDePago);
+                    command.Parameters.AddWithValue("@idContrato", pago.IdContrato);
 
-                    command.Parameters.AddWithValue("@precioInmueble", inmueble.PrecioInmueble);
-                    command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
-                    command.Parameters.AddWithValue("@idContrato", inmueble.IdContrato);
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)
@@ -205,9 +246,9 @@ public Pago ObtenerPorId(int id)
                     }
                 }
             }
-        }
+        
         return res;
     }
 
-*/
+
 }

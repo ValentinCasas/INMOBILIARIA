@@ -124,14 +124,15 @@ public class PagosController : Controller
             return RedirectToAction("Index");
         }
     }
-/*
+
+
     [HttpPost]
-    public IActionResult UpdateInmueble(Inmueble inmueble)
+    public IActionResult UpdatePago(Pago pago)
     {
         try
         {
-            RepositorioPagos repositorioPagos = new RepositorioPagos();
-            Boolean res = repositorioPagos.Actualizar(inmueble);
+            RepositorioPago repositorioPagos = new RepositorioPago();
+            Boolean res = repositorioPagos.Actualizar(pago);
             if (res == true)
             {
                 return RedirectToAction("index");
@@ -149,5 +150,5 @@ public class PagosController : Controller
         }
     }
 
-*/
+
 }

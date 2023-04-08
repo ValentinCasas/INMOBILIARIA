@@ -15,10 +15,6 @@ public class Inmueble
     [ForeignKey(nameof(IdPropietario))]
     public Propietario Propietario { get; set; }
 
-    public int IdContrato { get; set; }
-    [ForeignKey(nameof(IdContrato))]
-    public Contrato Contrato { get; set; }
-    
     public string? Direccion { get; set; }
     public string? Uso { get; set; } //comercial o residencial
     public string? Tipo { get; set; } //local, deposito, casa, departamento, etc
@@ -26,5 +22,19 @@ public class Inmueble
     public string? Coordenadas { get; set; }
     public decimal PrecioInmueble { get; set; }
     public string? Estado { get; set; } //disponible no disponible
+
+    public override string ToString()
+    {
+        return 
+               $"{Propietario.Nombre} |  " +
+               $" {Direccion} | " +
+               $" {Uso} | " +
+               $" {Tipo} | " +
+               $" ambientes: {CantidadAmbientes} | " +
+               $" {Coordenadas} | " +
+               $" $ {PrecioInmueble} | " +
+               $" Estado: {Estado}";
+    }
+
 
 }

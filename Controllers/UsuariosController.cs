@@ -126,7 +126,7 @@ public class UsuariosController : Controller
             if (contrasena == false)
             {
                 TempData["Error"] = "Su contraseña debe tener al menos 8 caracteres, una mayuscula, y un numero";
-                return RedirectToAction("Index");
+                return RedirectToAction("Update", new { id = usuario.Id });
             }
             string salt = "palabrasecretaparalacontraseña";
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -144,7 +144,7 @@ public class UsuariosController : Controller
             if (usuariosEmail.Count >= 1)
             {
                 TempData["Error"] = "ya hay un usuario con este email";
-                return RedirectToAction("Index");
+                return RedirectToAction("Update", new { id = usuario.Id });
             }
         }
 

@@ -14,6 +14,9 @@ public class Contrato
     [ForeignKey(nameof(IdInquilino))]
     public Inquilino Inquilino { get; set; }
 
+    public int IdInmueble { get; set; }
+    [ForeignKey(nameof(IdInmueble))]
+    public Inmueble Inmueble { get; set; }
 
     public List<Pago> Pago { get; set; }
 
@@ -25,7 +28,7 @@ public class Contrato
 
     public override string ToString()
     {
-        return $"IdInquilino: {IdInquilino}| Fecha inicio: {FechaInicio}| Fecha fin: {FechaFinalizacion}| Monto: {MontoAlquilerMensual}| Activo: {Activo}";
+        return $"inicio: {FechaInicio} | fin: {FechaFinalizacion}| $ {MontoAlquilerMensual}|Activo: {(Activo ? "si" : "no")}";
     }
 
 }

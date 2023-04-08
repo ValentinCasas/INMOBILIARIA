@@ -1,7 +1,6 @@
 @{
     ViewData["Title"] = "Crear Inmueble";
     var ListaPropietarios = (IList<Propietario>)ViewBag.listaPropietarios;
-    var ListaContratos = (IList<Contrato>)ViewBag.listaContratos;
 }
 
 <div class="d-flex justify-content-center align-items-center">
@@ -62,16 +61,6 @@
                         @foreach (var propietario in ListaPropietarios)
                         {
                             <option value="@propietario.Id">@propietario.ToString()</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="idContrato" class="form-label"><i class="ion-document"></i> Contrato</label>
-                    <select class="form-control" id="idContrato" name="idContrato">
-                        <option value="">Seleccione un contrato...</option>
-                        @foreach (var contrato in ListaContratos)
-                        {
-                            <option value="@contrato.Id">@contrato.ToString() </option>
                         }
                     </select>
                 </div>

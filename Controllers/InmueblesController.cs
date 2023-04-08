@@ -47,7 +47,6 @@ public class InmueblesController : Controller
     {
         RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
         ViewBag.listaPropietarios = repositorioInmueble.GetPropietarios();
-        ViewBag.listaContratos = repositorioInmueble.GetContratos();
         return View();
     }
 
@@ -95,7 +94,7 @@ public class InmueblesController : Controller
         }
         catch (Exception ex)
         {
-            TempData["Error"] = "No se pudo borrar el inmueble, para mas informacion contactarse con el administrador";
+            TempData["Error"] = "No se pudo borrar el inmueble, para mas informacion contactarse con el administrador, probablemente este asociado a algun contrato";
             return RedirectToAction("Index");
         }
     }
@@ -112,7 +111,6 @@ public class InmueblesController : Controller
             if (inmueble != null)
             {
                 ViewBag.listaPropietarios = repositorioInmueble.GetPropietarios();
-                ViewBag.listaContratos = repositorioInmueble.GetContratos();
                 ViewBag.inmueble = inmueble;
                 return View("Update");
             }

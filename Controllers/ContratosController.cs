@@ -36,6 +36,7 @@ public class ContratosController : Controller
     {
         RepositorioContrato repositorioContrato = new RepositorioContrato();
         ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
+        ViewBag.listaInmuebles = repositorioContrato.GetInmuebles();
         return View();
     }
 
@@ -72,17 +73,18 @@ public class ContratosController : Controller
             Boolean res = repositorioContrato.Baja(id);
             if (res == true)
             {
+                
                 return RedirectToAction("index");
             }
             else
             {
-                TempData["Error"] = "Ocurrió un error al intentar eliminar el inmueble.";
+                TempData["Error"] = "Ocurrió un error al intentar eliminar el contrato, probablemente este asociado a algun pago.";
                 return RedirectToAction("Index");
             }
         }
         catch (Exception ex)
         {
-            TempData["Error"] = "No se pudo borrar el inmueble, para mas informacion contactarse con el administrador";
+             TempData["Error"] = "Ocurrió un error al intentar eliminar el contrato, probablemente este asociado a algun pago.";
             return RedirectToAction("Index");
         }
     }
@@ -97,6 +99,7 @@ public class ContratosController : Controller
             if (contrato != null)
             {
                 ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
+                ViewBag.listaInmuebles = repositorioContrato.GetInmuebles();
                 ViewBag.contrato = contrato;
                 return View("Update");
             }
