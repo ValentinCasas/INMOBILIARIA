@@ -149,6 +149,14 @@
 
     <script defer>
 
+        /* al hacer click en el boton, aparecen input en la vista Usuarios/Update */
+
+        $(document).ready(function() {
+            $('#cambiar-contrasena').click(function() {
+                $('.password-container').toggle();
+            });
+        });
+
 
         /*modal error*/
         $(document).ready(function () {

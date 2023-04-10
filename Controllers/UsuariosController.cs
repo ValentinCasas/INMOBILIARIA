@@ -119,23 +119,49 @@ public class UsuariosController : Controller
             }
         }
 
-        if (usuario.Clave != u.Clave)
+
+        if (usuario.ClaveAntigua != null && usuario.NuevaClave != null && usuario.ConfirmarClave != null)
         {
-            bool contrasena = VerificarContrasena(usuario.Clave);
+
+            string salt = "palabrasecretaparalacontraseña";
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                             password: usuario.ClaveAntigua,
+                             salt: System.Text.Encoding.ASCII.GetBytes(salt),
+                             prf: KeyDerivationPrf.HMACSHA1,
+                             iterationCount: 30000,
+                             numBytesRequested: 256 / 8));
+
+            if (usuario.Clave != hashed)
+            {
+                TempData["Error"] = "la clave antigua ingresada no es correcta";
+                return RedirectToAction("Update", new { id = usuario.Id });
+            }
+
+            bool contrasena = VerificarContrasena(usuario.NuevaClave);
             if (contrasena == false)
             {
                 TempData["Error"] = "Su contraseña debe tener al menos 8 caracteres, una mayuscula, y un numero";
                 return RedirectToAction("Update", new { id = usuario.Id });
             }
-            string salt = "palabrasecretaparalacontraseña";
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                             password: usuario.Clave,
+            else
+            {
+                if (usuario.NuevaClave != usuario.ConfirmarClave)
+                {
+                    TempData["Error"] = "La nueva contraseña ingresada no coincide con la confirmacion";
+                    return RedirectToAction("Update", new { id = usuario.Id });
+                }
+            }
+
+            string claveNuevaHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                             password: usuario.NuevaClave,
                              salt: System.Text.Encoding.ASCII.GetBytes(salt),
                              prf: KeyDerivationPrf.HMACSHA1,
                              iterationCount: 30000,
                              numBytesRequested: 256 / 8));
-            usuario.Clave = hashed;
+            usuario.Clave = claveNuevaHashed;
+
         }
+
 
         if (usuario.Email != u.Email)
         {

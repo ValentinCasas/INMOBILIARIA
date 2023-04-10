@@ -32,11 +32,34 @@
                         <input asp-for="Email" value="@ViewBag.Usuario.Email" class="form-control" type="email"
                             class="form-control" />
                     </div>
-                    <div class="form-group col col-md-6">
-                        <label asp-for="Clave" class="control-label"><i class="ion-key"></i> Clave*</label>
-                        <input asp-for="Clave" value="@ViewBag.Usuario.Clave" class="form-control"
-                            class="form-control" />
+
+                    <div class="form-group col col-md-6 mt-4">
+                        <a class="btn btn-danger" id="cambiar-contrasena" href="#">Cambiar Contraseña</a>
                     </div>
+
+                    <input asp-for="Clave" type="hidden" value="@ViewBag.Usuario.Clave"/>
+
+
+
+
+                    <div class="password-container mt-2 mb-2" style="display:none;">
+                        <div class="form-group col col-md-12">
+                            <label asp-for="ClaveAntigua" class="control-label"><i class="ion-key"></i> Contraseña
+                                antigua*</label>
+                            <input asp-for="ClaveAntigua" class="form-control" data-val="true" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="NuevaClave" class="control-label"><i class="ion-key"></i> Nueva
+                                contraseña*</label>
+                            <input asp-for="NuevaClave" class="form-control" data-val="true" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="ConfirmarClave" class="control-label"><i class="ion-key"></i> Confirmar
+                                contraseña*</label>
+                            <input asp-for="ConfirmarClave" class="form-control" data-val="true" />
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-6">
                         <label asp-for="Edad" class="control-label"><i class="ion-clock"></i> Edad*</label>
                         <input asp-for="Edad" value="@ViewBag.Usuario.Edad" class="form-control" type="number"
@@ -99,6 +122,21 @@
 
 
 <style>
+
+    .password-container {
+  display: none;
+  background-color: #b82c2c;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+
+
+    #cambiar-contrasena{
+        width: 100%;
+    }
+
     #AvatarFile {
         height: 100px;
     }

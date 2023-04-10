@@ -46,6 +46,19 @@ public class ContratosController : Controller
     {
         try
         {
+            if (contrato.FechaInicio >= contrato.FechaFinalizacion)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser anterior a la fecha de finalización";
+                return RedirectToAction("Create");
+            }
+
+
+            if (contrato.FechaInicio < DateTime.Now.Date)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
+                return RedirectToAction("Create");
+            }
+
             RepositorioContrato repositorioContrato = new RepositorioContrato();
             int res = repositorioContrato.Alta(contrato);
             if (res > 0)
@@ -65,6 +78,7 @@ public class ContratosController : Controller
         }
     }
 
+
     [HttpGet]
     public IActionResult Delete(int id)
     {
@@ -74,7 +88,7 @@ public class ContratosController : Controller
             Boolean res = repositorioContrato.Baja(id);
             if (res == true)
             {
-                
+
                 return RedirectToAction("index");
             }
             else
@@ -85,7 +99,7 @@ public class ContratosController : Controller
         }
         catch (Exception ex)
         {
-             TempData["Error"] = "Ocurrió un error al intentar eliminar el contrato, probablemente este asociado a algun pago.";
+            TempData["Error"] = "Ocurrió un error al intentar eliminar el contrato, probablemente este asociado a algun pago.";
             return RedirectToAction("Index");
         }
     }
@@ -122,6 +136,18 @@ public class ContratosController : Controller
     {
         try
         {
+            if (contrato.FechaInicio >= contrato.FechaFinalizacion)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser anterior a la fecha de finalización";
+                return RedirectToAction("Update");
+            }
+
+            if (contrato.FechaInicio < DateTime.Now.Date)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
+                return RedirectToAction("Update");
+            }
+
             RepositorioContrato repositorioContrato = new RepositorioContrato();
             Boolean res = repositorioContrato.Actualizar(contrato);
             if (res == true)

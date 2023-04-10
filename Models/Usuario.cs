@@ -17,8 +17,8 @@ namespace INMOBILIARIA.Models
 
     public class Usuario
     {
-/*         [Key]
-        [Display(Name = "Código")] */
+        /*         [Key]
+                [Display(Name = "Código")] */
         public int Id { get; set; }
 
         [Required]
@@ -32,6 +32,13 @@ namespace INMOBILIARIA.Models
 
         [Required, DataType(DataType.Password)]
         public string Clave { get; set; }
+
+
+public string ClaveAntigua { get; set; }
+    public string NuevaClave { get; set; }
+    public string ConfirmarClave { get; set; }
+
+
 
         [Required]
         public int Edad { get; set; }
