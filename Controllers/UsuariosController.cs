@@ -74,7 +74,6 @@ public class UsuariosController : Controller
     }
 
 
-
     /* [Authorize(Policy = "Administrador")] */
     [Authorize]
     [HttpPost]
@@ -118,7 +117,6 @@ public class UsuariosController : Controller
                 usuario.AvatarFile.CopyTo(stream);
             }
         }
-
 
         if (usuario.ClaveAntigua != null && usuario.NuevaClave != null && usuario.ConfirmarClave != null)
         {
@@ -246,6 +244,11 @@ public class UsuariosController : Controller
         if (contrasena == false)
         {
             TempData["Error"] = "Su contraseña debe tener al menos 8 caracteres, una mayuscula, y un numero";
+            return RedirectToAction("Create");
+        }
+
+        if(u.ConfirmarClave != u.Clave){
+            TempData["Error"] = "Las contraseñas no coinciden";
             return RedirectToAction("Create");
         }
 
