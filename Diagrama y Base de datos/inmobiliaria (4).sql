@@ -203,7 +203,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Edad`, `Dni`, `Email`, `Clave`, `AvatarUrl`, `Rol`) VALUES
-(37, 'Mariano', 'Luzza Bonilla', 20, 22222222, 'marianoLuzza@gmail.com', 'wDEeOf0m4GHd71HfVwP7XEV1pUgiW2ymJvMwtk/F0GI=', '/Uploads\\avatar_d004435cfc6e4401a7a3fa5721b02840.jpg', 2),
+(37, 'Mariano', 'Luzza Bonilla', 20, 22222222, 'marianoLuzza@gmail.com', 'CMBf7jPJjZCxn7eoNFiGoh/Mg1ouPR2I0tyV4LM+g7k=', '/Uploads\\avatar_d004435cfc6e4401a7a3fa5721b02840.jpg', 2),
 (38, 'Maria', 'Laura', 30, 34000000, 'mariaLaura@gmail.com', 'vZlEtHizkfNSyogT4zTsFwLEB9DX0ZzRho4EvRqb6Y8=', '/Uploads\\avatar_13f742dadf214c29b4445a293a869e7e.jpg', 3),
 (39, 'Kevin', 'Garcia', 21, 41222333, 'kevinGarcia12@gmail.com', 'Qn+o5tUUVufr6kzFoB2ObdSl0UvnzhnNWDH6o2nYQw0=', '/Imagenes/avatar_por_defecto.jpg', 3),
 (40, 'Ivan', 'Collado', 35, 32444444, 'ivanCollado@gmail.com', 'zEgX/k8gU+/CtoZ0E8eSteIaRVwfZI5NDlnmD+K0I6U=', '/Uploads\\avatar_58a3a29a7ae54f76a49e75985dc03e6a.jpg', 3),
