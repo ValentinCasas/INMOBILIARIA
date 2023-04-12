@@ -149,47 +149,43 @@
 
     <script defer>
 
-    $(document).ready(function() {
-  // Obtener todas las tarjetas de usuario
-  var userCards = $(".card");
+        $(document).ready(function () {
+            // Obtener todas las tarjetas de usuario
+            var userCards = $(".card");
+            // Agregar un evento de escucha de entrada al campo de entrada de búsqueda
+            $("#search-input").on("input", function () {
+                // Obtener el texto de búsqueda y convertirlo a minúsculas
+                var searchText = $(this).val().toLowerCase();
+                // Mostrar el input de búsqueda
+                $(this).show();
+                // Mostrar todas las tarjetas de usuario
+                userCards.show();
+                // Si el campo de búsqueda está vacío, salir de la función
+                if (searchText === "") {
+                    $("#no-results-message").hide();
+                    return;
+                }
+                // Filtrar las tarjetas de usuario que no coinciden con el texto de búsqueda
+                var filteredCards = userCards.filter(function () {
+                    // Obtener el nombre y apellido del usuario en esta tarjeta
+                    var fullName = $(this).find(".card-title").text().toLowerCase();
+                    // Comprobar si el texto de búsqueda aparece en el nombre o apellido del usuario
+                    return fullName.indexOf(searchText) === -1;
+                });
 
-  // Agregar un evento de escucha de entrada al campo de entrada de búsqueda
-  $("#search-input").on("input", function() {
-    // Obtener el texto de búsqueda y convertirlo a minúsculas
-    var searchText = $(this).val().toLowerCase();
 
-    // Mostrar el input de búsqueda
-    $(this).show();
 
-    // Mostrar todas las tarjetas de usuario
-    userCards.show();
+                // Si no se encontraron coincidencias, mostrar un mensaje de error
+                if (filteredCards.length === userCards.length) {
+                    $("#no-results-message").show();
+                } else {
+                    $("#no-results-message").hide();
+                }
 
-    // Si el campo de búsqueda está vacío, salir de la función
-    if (searchText === "") {
-      $("#no-results-message").hide();
-      return;
-    }
-
-    // Filtrar las tarjetas de usuario que no coinciden con el texto de búsqueda
-    var filteredCards = userCards.filter(function() {
-      // Obtener el nombre y apellido del usuario en esta tarjeta
-      var fullName = $(this).find(".card-title").text().toLowerCase();
-
-      // Comprobar si el texto de búsqueda aparece en el nombre o apellido del usuario
-      return fullName.indexOf(searchText) === -1;
-    });
-
-    // Si no se encontraron coincidencias, mostrar un mensaje de error
-    if (filteredCards.length === userCards.length) {
-      $("#no-results-message").show();
-    } else {
-      $("#no-results-message").hide();
-    }
-
-    // Ocultar las tarjetas de usuario que no coinciden con el texto de búsqueda
-    filteredCards.hide();
-  });
-});
+                // Ocultar las tarjetas de usuario que no coinciden con el texto de búsqueda
+                filteredCards.hide();
+            });
+        });
 
 
 

@@ -247,7 +247,8 @@ public class UsuariosController : Controller
             return RedirectToAction("Create");
         }
 
-        if(u.ConfirmarClave != u.Clave){
+        if (u.ConfirmarClave != u.Clave)
+        {
             TempData["Error"] = "Las contraseñas no coinciden";
             return RedirectToAction("Create");
         }
@@ -359,14 +360,20 @@ public class UsuariosController : Controller
         RepositorioUsuario repositorio = new RepositorioUsuario();
         try
         {
+            // Se obtiene la URL de retorno de la sesión temporal.
             var returnUrl = String.IsNullOrEmpty(TempData["returnUrl"] as string) ? "/Home" : TempData["returnUrl"].ToString();
+            // Si el modelo de datos del formulario de inicio de sesión es válido.
             if (ModelState.IsValid)
             {
+                // Se busca el usuario en la base de datos por su dirección de correo electrónico.
                 var e = repositorio.ObtenerPorEmail(login.Usuario);
+                // Si el usuario no existe.
                 if (e == null)
                 {
                     ModelState.AddModelError("", "El email o la clave no son correctos");
+                    // Se almacena la URL de retorno en la sesión temporal.
                     TempData["returnUrl"] = returnUrl;
+                    // Se redirige al usuario a la página de inicio de sesión.
                     return View();
                 }
 
@@ -374,6 +381,7 @@ public class UsuariosController : Controller
                 // Si el usuario no tiene el rol de administrador, se aplicará la función de hash a su contraseña y se verificará su autenticación.
                 if (e.RolNombre != enRoles.Administrador.ToString())
                 {
+                    // Se aplica la función de hash PBKDF2 a la contraseña ingresada por el usuario.
                     string salt = "palabrasecretaparalacontraseña";
                     string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                                      password: login.Clave,
@@ -382,6 +390,7 @@ public class UsuariosController : Controller
                                      iterationCount: 30000,
                                      numBytesRequested: 256 / 8));
 
+                    // Si la contraseña no coincide.
                     if (e.Clave != hashed)
                     {
                         ModelState.AddModelError("", "El email o la clave no son correctos");
@@ -389,22 +398,32 @@ public class UsuariosController : Controller
                         return View();
                     }
                 }
-
+                // Se crea una lista de Claims que contienen información sobre el usuario.
+                //todo esto se puede usar para trabajarlo por ejemplo en:
+                //<a class="nav-link" href="/Usuarios/Profile/@User.FindFirst("EmpleadoId").Value">
+                //me va a redirigir al perfil que tenga como id = EmpleadoId, ya que se almacenó al loguearse
                 var claims = new List<Claim>
             {
+                // Correo electrónico del usuario.
                 new Claim(ClaimTypes.Name, e.Email),
+                // Nombre completo del usuario.
                 new Claim("FullName", e.Nombre + " " + e.Apellido),
+                // Rol del usuario.
                 new Claim(ClaimTypes.Role, e.RolNombre),
+                // ID del usuario.
                 new Claim("EmpleadoId", e.Id.ToString()),
 
             };
-
+                // Se crea un objeto ClaimsIdentity y se firma en el usuario.
                 var claimsIdentity = new ClaimsIdentity(
                         claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                // Se inicia sesión en el usuario.
                 await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
+
+                // Se elimina el valor de returnUrl 
                 TempData.Remove("returnUrl");
                 return Redirect(returnUrl);
             }
