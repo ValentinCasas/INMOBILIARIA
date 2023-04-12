@@ -4,155 +4,123 @@
 }
 
 
-
-<div class="container mt-5 ">
-    <div class="row justify-content-center ">
-        <div class="col-lg-12">
-            <div class="card " id="card-form">
-                <div class="card-header">
-                    <h1 class="display-4 text-center">Usuarios</h1>
-                </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card-header bg-primary text-white">
+                <h1 class="display-4 text-center mb-0">USUARIOS</h1>
+                <input type="text" id="search-input" class="form-control" placeholder="Buscar por nombre o apellido">
+            </div>
+            <div class="card border-0">
                 <div class="card-body">
-                    <form class="my-2" method="post" action="">
-                        <div class="form-group row">
-                            <div class="col-md-8">
-                                <input type="text" name="query" placeholder="Buscar Usuarios..."
-                                    class="form-control" />
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        @foreach (var item in lista)
+                        {
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <img src="@item.AvatarUrl" class="card-img-top" alt="Avatar de @item.Nombre">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Nombre @item.Apellido</h5>
+                                        <p class="card-text"><strong>DNI:</strong> @item.Dni</p>
+                                        <p class="card-text"><strong>Edad:</strong> @item.Edad</p>
+                                        <p class="card-text"><strong>Email:</strong> @item.Email</p>
+                                        <p class="card-text"><strong>Rol:</strong> @ViewBag.Roles[(int)item.Rol]</p>
+                                        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
+                                            <a href="@Url.Action("Update", new { id = item.Id })"
+                                                class="btn btn-outline-secondary"><ion-icon
+                                                    name="create-outline"></ion-icon>Editar</a>
+                                            <a href="@Url.Action("Delete", new { id = item.Id })"
+                                                class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
+                                                    name="trash-outline"></ion-icon>Borrar</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary"><ion-icon
-                                        name="search-outline"></ion-icon></button>
-                            </div>
-                        </div>
-                    </form>
-                    @if (lista.Count != 0)
+                        }
+                    </div>
+                    <div id="no-results-message" class="text-center mt-3" style="display:none">No se encontraron
+                        resultados</div>
+                    @if (lista.Count == 0)
                     {
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                                        <th>Dni</th>
-                                        <th>Edad</th>
-                                        <th>Email</th>
-                                        <th>AvatarUrl</th>
-                                        <th>Rol</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in lista)
-                                    {
-                                        <tr class="accordion-toggle" data-toggle="collapse" data-target="#fila-@item.Id">
-                                            <td>@item.Nombre</td>
-                                            <td>@item.Apellido</td>
-                                            <td>@item.Dni</td>
-                                            <td>@item.Edad</td>
-                                            <td>@item.Email</td>
-                                            <td>
-                                                <img id="imgAvatar" src="@item.AvatarUrl" title="@item.AvatarUrl">
-                                            </td>
-
-                                            @foreach (var kvp in (IDictionary<int, string>)ViewBag.Roles)
-                                            {
-                                                if ((int)item.Rol == kvp.Key)
-                                                {
-                                                    <td>@kvp.Value</td>
-                                                }
-                                            }
-
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Acciones">
-                                                    <a href="@Url.Action("Update", new { id = item.Id })"
-                                                        class="btn btn-outline-secondary"><ion-icon
-                                                            name="create-outline"></ion-icon> </a>
-                                                    <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
-                                                            name="trash-outline"></ion-icon> </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="hiddenRow">
-                                            <td colspan="9">
-                                                <div class="collapse" id="fila-@item.Id">
-                                                    <div class="card card-body">
-                                                        <p>Información adicional sobre el Usuario...</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                        <h2 class="text-center mt-3">No hay Usuarios en el sitio</h2>
                     }
-                    else
-                    {
-                        <h2>No hay Usuarios en el sitio</h2>
-                    }
-                </div>
-                <div class="card-footer text-end" id="add">
-                    <a class="btn btn-success" href="/Usuarios/Create" role="button"> <ion-icon
-                            name="add-outline"></ion-icon></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="row mt-4">
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Usuarios totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Usuarios totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Usuarios totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
+<div class="card-footer bg-white text-end" id="add" style="margin-top: 20px;">
+    <a class="btn btn-success" href="/Usuarios/Create" role="button"><ion-icon name="add-outline"></ion-icon></a>
 </div>
+
+
+
+
 
 
 <style>
-    #imgAvatar {
-        height: 80px;
+    .card-header {
+        border-bottom: none;
+    }
+
+    .card-footer {
+        border-top: none;
+    }
+
+    .btn-group {
+        font-size: 1.2rem;
     }
 
     #add {
-        position: sticky;
+        position: fixed;
         bottom: 0;
+        right: 0;
+        margin: 20px;
     }
 
-    #card-form {
-        background-color: #ada8a85c;
-        height: 500px;
-        overflow-y: scroll;
+
+    .input-container {
+        max-width: 500px;
+        margin: 0 auto;
     }
 
-    .table-responsive {
-        background-color: #c2c4cf;
-        border-radius: 5px;
-        border: .5px solid rgb(105, 101, 101);
+    .input-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .input-group input {
+        border-radius: 30px 0 0 30px;
+        border: none;
+    }
+
+    .input-group button {
+        border-radius: 0 30px 30px 0;
+    }
+
+    .input-group button:hover {
+        background-color: #007bff;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        outline: none;
+        border-color: #ced4da;
+    }
+
+    .form-control::placeholder {
+        color: #adb5bd;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
     }
 </style>

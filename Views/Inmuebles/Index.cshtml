@@ -7,85 +7,53 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card" id="card-form">
-                <div class="card-header">
+                <div class="card-header bg-primary text-white">
                     <h1 class="display-4 text-center">INMUEBLES</h1>
+                    <input type="text" id="search-input" class="form-control"
+                        placeholder="Buscar por localidad">
                 </div>
+            <div class="card" id="card-form">
                 <div class="card-body">
-                    <form class="my-2" method="get" action="">
-                        <div class="form-group row">
-                            <div class="col-md-8">
-                                <input type="text" name="search" placeholder="Buscar inmuebles..."
-                                    class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary"><ion-icon
-                                        name="search-outline"></ion-icon></button>
-                            </div>
-                        </div>
-                    </form>
+
 
                     @if (lista.Count != 0)
                     {
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Direccion</th>
-                                        <th>Uso</th>
-                                        <th>Tipo</th>
-                                        <th>CantidadAmbientes</th>
-                                        <th>Coordenadas</th>
-                                        <th>PrecioInmueble</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in lista)
-                                    {
-                                        <tr class="accordion-toggle" data-toggle="collapse" data-target="#fila-@item.Id">
-                                            <td>@item.Direccion</td>
-                                            <td>@item.Uso</td>
-                                            <td>@item.Tipo</td>
-                                            <td>@item.CantidadAmbientes</td>
-                                            <td>@item.Coordenadas</td>
-                                            <td>@item.PrecioInmueble</td>
-                                            <td>@item.Estado</td>
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Acciones">
-                                                    <a href="@Url.Action("Update", new { id = item.Id })"
-                                                        class="btn btn-outline-secondary"><ion-icon
-                                                            name="create-outline"></ion-icon>
-                                                    </a>
-                                                    <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
-                                                            name="trash-outline"></ion-icon> </a>
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                            @foreach (var item in lista)
+                            {
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title ">@item.Direccion</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">@item.Uso - @item.Tipo</h6>
+                                            <p class="card-text">Ambientes: @item.CantidadAmbientes</p>
+                                            <p class="card-text">Coordenadas: @item.Coordenadas</p>
+                                            <p class="card-text">Precio: @item.PrecioInmueble</p>
+                                            <p class="card-text">Estado: @item.Estado</p>
+                                            <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
+                                            <a href="@Url.Action("Update", new { id = item.Id })"
+                                                class="btn btn-outline-secondary"><ion-icon
+                                                    name="create-outline"></ion-icon>Editar</a>
+                                            <a href="@Url.Action("Delete", new { id = item.Id })"
+                                                class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
+                                                    name="trash-outline"></ion-icon>Borrar</a>
+                                        </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <details>
+                                                <summary>Propietario</summary>
+                                                <div>
+                                                    <p>Nombre: @item.Propietario.Nombre </p>
+                                                    <p>Apellido: @item.Propietario.Apellido </p>
+                                                    <p>Dni: @item.Propietario.Dni </p>
+                                                    <p>Telefono: @item.Propietario.Telefono </p>
+                                                    <p>Email: @item.Propietario.Email </p>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="hiddenRow">
-                                            <td colspan="8">
-                                                <div class="collapse" id="fila-@item.Id">
-                                                    <div class="card card-body">
-                                                        <details>
-                                                            <summary>Propietario</summary>
-                                                            <div>
-                                                                <p>Nombre: @item.Propietario.Nombre </p>
-                                                                <p>Apellido: @item.Propietario.Apellido </p>
-                                                                <p>Dni: @item.Propietario.Dni </p>
-                                                                <p>Telefono: @item.Propietario.Telefono </p>
-                                                                <p>Email: @item.Propietario.Email </p>
-                                                            </div>
-                                                        </details>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-
+                                            </details>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     }
                     else
@@ -93,48 +61,15 @@
                         <h2 class="text-center">No hay inmuebles en el sitio</h2>
                     }
                 </div>
-                <div class="card-footer text-end" id="add">
-                    <a class="btn btn-success" href="@Url.Action("Create")" role="button"><ion-icon
-                            name="add-outline"></ion-icon>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="row mt-4">
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Inmuebles totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
+<div  id="add">
+    <a class="btn btn-success" href="@Url.Action("Create")" role="button"><ion-icon name="add-outline"></ion-icon>
+    </a>
 </div>
-
 
 
 
@@ -189,10 +124,6 @@
         overflow-y: scroll;
     }
 
-    #add {
-        position: sticky;
-        bottom: 0;
-    }
 
     .accordion-toggle {
         transition: all .5s ease;
@@ -207,6 +138,13 @@
         background-color: #c2c4cf;
         border-radius: 5px;
         border: .5px solid rgb(105, 101, 101);
+    }
+
+    #add {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
     }
 </style>
 
