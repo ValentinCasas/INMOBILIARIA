@@ -12,7 +12,7 @@
                     <input type="text" id="search-input" class="form-control"
                         placeholder="Buscar por importe">
                 </div>
-            <div class="card" id="card-form">
+            <div class="card bg-light" id="card-form">
                 <div class="card-body">
 
 
@@ -22,11 +22,11 @@
                         @foreach (var item in lista)
                         {
                             <div class="col">
-                                <div class="card">
+                                <div class="card border-secondary">
                                     <div class="card-body">
                                         <h5 class="card-title">$ @item.Importe</h5>
                                         <h6 class="card-subtitle mb-2 text-muted">Fecha de pago: @item.FechaDePago</h6>
-                                    </div>
+                                   <hr>
                                     <div class="card-body">
                                         <p class="card-text">Pago número: @item.NumDePago</p>
                                    
@@ -38,6 +38,7 @@
                                                 class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
                                                     name="trash-outline"></ion-icon>Borrar</a>
                                         </div>
+                                    </div>
                                    
                                     </div>
                                     <div class="card-footer">

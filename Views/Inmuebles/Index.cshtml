@@ -12,7 +12,7 @@
                     <input type="text" id="search-input" class="form-control"
                         placeholder="Buscar por localidad">
                 </div>
-            <div class="card" id="card-form">
+            <div class="card bg-light" id="card-form">
                 <div class="card-body">
 
 
@@ -22,10 +22,11 @@
                             @foreach (var item in lista)
                             {
                                 <div class="col">
-                                    <div class="card">
+                                    <div class="card border-secondary">
                                         <div class="card-body">
                                             <h5 class="card-title ">@item.Direccion</h5>
                                             <h6 class="card-subtitle mb-2 text-muted">@item.Uso - @item.Tipo</h6>
+                                            <hr>
                                             <p class="card-text">Ambientes: @item.CantidadAmbientes</p>
                                             <p class="card-text">Coordenadas: @item.Coordenadas</p>
                                             <p class="card-text">Precio: @item.PrecioInmueble</p>
