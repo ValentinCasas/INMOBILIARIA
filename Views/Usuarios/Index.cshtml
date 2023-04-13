@@ -21,9 +21,11 @@
                                     <img src="@item.AvatarUrl" class="card-img-top" alt="Avatar de @item.Nombre">
                                     <div class="card-body">
                                         <h5 class="card-title">@item.Nombre @item.Apellido</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted"> @item.Email</h6>
+                                        <hr>
                                         <p class="card-text"><strong>DNI:</strong> @item.Dni</p>
                                         <p class="card-text"><strong>Edad:</strong> @item.Edad</p>
-                                        <p class="card-text"><strong>Email:</strong> @item.Email</p>
+                                        
                                         <p class="card-text"><strong>Rol:</strong> @ViewBag.Roles[(int)item.Rol]</p>
                                         <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
                                             <a href="@Url.Action("Update", new { id = item.Id })"
