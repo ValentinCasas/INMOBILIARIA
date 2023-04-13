@@ -5,33 +5,29 @@
 }
 
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="display-4 text-center">INQUILINOS</h1>
-                    <input type="text" id="search-input" class="form-control"
-                        placeholder="Buscar por nombre o apellido">
-                </div>
-            <div class="card" id="card-form">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card-header bg-primary text-white">
+          <h1 class="display-4 text-center">INQUILINOS</h1>
+          <div class="input-group">
+            <input type="text" id="search-input" class="form-control" placeholder="Buscar por nombre o apellido">
+            <button class="btn btn-outline-light" type="button"><ion-icon name="search-outline"></ion-icon></button>
+          </div>
+        </div>
+      <div class="card bg-light">
+        <div class="card-body">
+          @if (lista.Count != 0){
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var item in lista){
+            <div class="col">
+              <div class="card border-secondary">
                 <div class="card-body">
-
-
-                    @if (lista.Count != 0)
-                    {
-                        <div class="row row-cols-1 row-cols-md-3 g-4">
-                            @foreach (var item in lista)
-                            {
-                                 <div class="col">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@item.Nombre @item.Apellido</h5>
-                                      <h6 class="card-subtitle mb-2 text-muted">Email: @item.Email</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text">DNI: @item.Dni</p>
-                                        <p class="card-text">Teléfono: @item.Telefono</p>
-
-                                    <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
+                  <h5 class="card-title">@item.Nombre @item.Apellido</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">@item.Email</h6>
+                  <hr>
+                  <p class="card-text"><strong>DNI:</strong> @item.Dni</p>
+                  <p class="card-text"><strong>Teléfono:</strong> @item.Telefono</p>
+                  <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
                                             <a href="@Url.Action("Update", new { id = item.Id })"
                                                 class="btn btn-outline-secondary"><ion-icon
                                                     name="create-outline"></ion-icon>Editar</a>
@@ -39,21 +35,20 @@
                                                 class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
                                                     name="trash-outline"></ion-icon>Borrar</a>
                                         </div>
-                                    </div>
-                                 </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <h2 class="text-center">No hay inquilinos en el sitio</h2>
-                    }
                 </div>
-         
+              </div>
             </div>
+            }
+          </div>
+          }else{
+          <div class="alert alert-warning text-center" role="alert">
+            No hay inquilinos en el sitio
+          </div>
+          }
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div  id="add">
