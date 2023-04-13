@@ -7,125 +7,74 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card" id="card-form">
-                <div class="card-header">
-                    <h1 class="display-4 text-center">Pagos</h1>
+                <div class="card-header bg-primary text-white">
+                    <h1 class="display-4 text-center">PAGOS</h1>
+                    <input type="text" id="search-input" class="form-control"
+                        placeholder="Buscar por importe">
                 </div>
+            <div class="card" id="card-form">
                 <div class="card-body">
-                    <form class="my-2" method="get" action="">
-                        <div class="form-group row">
-                            <div class="col-md-8">
-                                <input type="text" name="search" placeholder="Buscar pagos..."
-                                    class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary"><ion-icon
-                                        name="search-outline"></ion-icon></button>
-                            </div>
-                        </div>
-                    </form>
 
-                    @if (lista.Count != 0)
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Numero de pago</th>
-                                        <th>Fecha de pago</th>
-                                        <th>Importe</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in lista)
-                                    {
-                                        <tr class="accordion-toggle" data-toggle="collapse" data-target="#fila-@item.Id">
-                                            <td>@item.NumDePago</td>
-                                            <td>@item.FechaDePago</td>
-                                            <td>@item.Importe</td>
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Acciones">
-                                                    <a href="@Url.Action("Update", new { id = item.Id })"
-                                                        class="btn btn-outline-secondary"><ion-icon
-                                                            name="create-outline"></ion-icon>
-                                                    </a>
-                                                    <a href="@Url.Action("Delete", new { id = item.Id })"
-                                                        class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
-                                                            name="trash-outline"></ion-icon> </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="hiddenRow">
-                                            <td colspan="8">
-                                                <div class="collapse" id="fila-@item.Id">
-                                                    <div class="card card-body">   
-                                                        <details>            
-                                                        <summary>Contrato:</summary>
-                                                        <div>
-                                                        <p>Fecha inicial: @item.Contrato.FechaInicio </p>
-                                                        <p>Fecha Final: @item.Contrato.FechaFinalizacion </p>
-                                                        <p>Monto mensual: @item.Contrato.MontoAlquilerMensual </p>
-                                                        <p>Activo: @item.Contrato.Activo </p>
-                                                        <p>Id Inquilino: @item.Contrato.IdInquilino </p>
-</div>
-                                                        </details>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
 
-                        </div>
-                    }
-                    else
+                @if (lista.Count != 0)
+                {
+                    <div class="row row-cols-1 row-cols-md-5 g-4">
+                        @foreach (var item in lista)
+                        {
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">$ @item.Importe</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Fecha de pago: @item.FechaDePago</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">Pago número: @item.NumDePago</p>
+                                   
+                                        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
+                                            <a href="@Url.Action("Update", new { id = item.Id })"
+                                                class="btn btn-outline-secondary"><ion-icon
+                                                    name="create-outline"></ion-icon>Editar</a>
+                                            <a href="@Url.Action("Delete", new { id = item.Id })"
+                                                class="btn btn-outline-danger" id="btn-delete-@item.Id"><ion-icon
+                                                    name="trash-outline"></ion-icon>Borrar</a>
+                                        </div>
+                                   
+                                    </div>
+                                    <div class="card-footer">
+                                            <details>            
+                                                <summary>Contrato:</summary>
+                                                <div>
+                                                    <p>Fecha inicial: @item.Contrato.FechaInicio </p>
+                                                    <p>Fecha Final: @item.Contrato.FechaFinalizacion </p>
+                                                    <p>Monto mensual: @item.Contrato.MontoAlquilerMensual </p>
+                                                    <p>Activo: @item.Contrato.Activo </p>
+                                                </div>
+                                            </details>
+                                        </div>
+                                  
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
                     {
                         <h2 class="text-center">No hay pagos en el sitio</h2>
                     }
                 </div>
-                <div class="card-footer text-end" id="add">
-                    <a class="btn btn-success" href="@Url.Action("Create")" role="button"><ion-icon
-                            name="add-outline"></ion-icon>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="row mt-4">
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Pagos totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Pagos totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Pagos totales</h5>
-                <p class="card-text">@lista.Count()</p>
-            </div>
-        </div>
-    </div>
-
+           
+<div  id="add">
+    <a class="btn btn-success" href="@Url.Action("Create")" role="button"><ion-icon name="add-outline"></ion-icon>
+    </a>
 </div>
+                
+
+
 
 
 
@@ -181,10 +130,6 @@
         overflow-y: scroll;
     }
 
-    #add {
-        position: sticky;
-        bottom: 0;
-    }
 
     .accordion-toggle {
         transition: all .5s ease;
@@ -199,6 +144,13 @@
         background-color: #c2c4cf;
         border-radius: 5px;
         border: .5px solid rgb(105, 101, 101);
+    }
+
+    #add {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
     }
 </style>
 
