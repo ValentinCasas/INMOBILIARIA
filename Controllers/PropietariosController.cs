@@ -32,6 +32,8 @@ namespace INMOBILIARIA.Controllers
         {
             RepositorioPropietario repositorioPropietario = new RepositorioPropietario();
             ViewBag.lista = repositorioPropietario.GetPropietarios();
+            ViewBag.inmuebles = repositorioPropietario.GetInmuebles();
+            
             return View();
         }
 

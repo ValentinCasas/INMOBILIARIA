@@ -1,6 +1,7 @@
 @{
 
     var lista = (IList<Inmueble>)ViewBag.lista;
+    var contratos = (IList<Contrato>)ViewBag.contratos;
     ViewData["Title"] = "Lista de Inmuebles";
 }
 
@@ -10,7 +11,7 @@
                 <div class="card-header bg-primary text-white">
                     <h1 class="display-4 text-center">INMUEBLES</h1>
                     <input type="text" id="search-input" class="form-control"
-                        placeholder="Buscar por localidad">
+                        placeholder="Buscar por localidad o disponibilidad">
                 </div>
             <div class="card bg-light" id="card-form">
                 <div class="card-body">
@@ -30,7 +31,7 @@
                                             <p class="card-text">Ambientes: @item.CantidadAmbientes</p>
                                             <p class="card-text">Coordenadas: @item.Coordenadas</p>
                                             <p class="card-text">Precio: @item.PrecioInmueble</p>
-                                            <p class="card-text">Estado: @item.Estado</p>
+                                            <p class="card-text card-title ">Estado: @item.Estado</p>
                                             <div class="btn-group d-flex justify-content-center" role="group" aria-label="Acciones">
                                             <a href="@Url.Action("Update", new { id = item.Id })"
                                                 class="btn btn-outline-secondary"><ion-icon
@@ -66,6 +67,9 @@
                                         </div>
                                         </div>
                                         <div class="card-footer">
+                                            <div class="">
+                    <details>
+                      <summary>Detalles</summary>
                                             <details>
                                                 <summary>Propietario</summary>
                                                 <div>
@@ -76,6 +80,17 @@
                                                     <p>Email: @item.Propietario.Email </p>
                                                 </div>
                                             </details>
+                                            <details>
+                                                <summary>Contrato activo</summary>
+                                                 @foreach (var contrato in contratos.Where(c => c.IdInmueble == item.Id && c.Activo))
+                      {
+                        <div>
+                          <p>@contrato.ToString()</p>
+                        </div>
+                      }
+                                            </details>
+                    </details>
+                    </div>
                                         </div>
                                     </div>
                                 </div>

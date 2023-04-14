@@ -42,6 +42,53 @@ public class RepositorioPropietario
         return propietarios;
     }
 
+     public List<Inmueble> GetInmuebles()
+    {
+        List<Inmueble> inmuebles = new List<Inmueble>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.Id, i.Direccion, i.Uso, i.Tipo, i.CantidadAmbientes, i.Coordenadas, i.PrecioInmueble, i.Estado, i.IdPropietario,
+                        p.Nombre, p.Apellido, p.Dni, p.Telefono, p.Id, p.Email
+                        FROM inmueble i
+                        JOIN propietario p ON i.IdPropietario = p.Id
+                        ";
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Inmueble inmueble = new Inmueble()
+                        {
+                            Id = reader.GetInt32(nameof(inmueble.Id)),
+                            Direccion = reader.GetString(nameof(inmueble.Direccion)),
+                            Uso = reader.GetString(nameof(inmueble.Uso)),
+                            Tipo = reader.GetString(nameof(inmueble.Tipo)),
+                            CantidadAmbientes = reader.GetInt32(nameof(inmueble.CantidadAmbientes)),
+                            Coordenadas = reader.GetString(nameof(inmueble.Coordenadas)),
+                            PrecioInmueble = reader.GetDecimal(nameof(inmueble.PrecioInmueble)),
+                            Estado = reader.GetString(nameof(inmueble.Estado)),
+                            IdPropietario = reader.GetInt32(nameof(inmueble.IdPropietario)),
+                            Propietario = new Propietario()
+                            {
+                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                                Dni = reader.GetInt64(nameof(Propietario.Dni)),
+                                Telefono = reader.GetInt64(nameof(Propietario.Telefono)),
+                                Id = reader.GetInt32(nameof(Propietario.Id)),
+                                Email = reader.GetString(nameof(Propietario.Email)),
+                            },
+                        };
+                        inmuebles.Add(inmueble);
+                    }
+                }
+            }
+        }
+        return inmuebles;
+    }
+
     public int Alta(Propietario propietario)
     {
         int res = 0;

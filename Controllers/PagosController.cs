@@ -42,12 +42,20 @@ public class PagosController : Controller
         return View();
     }
 
-    public IActionResult Create()
+    [HttpGet]
+    public IActionResult Create(int? contratoId)
     {
         RepositorioPago repositorioPago = new RepositorioPago();
         ViewBag.listaContratos = repositorioPago.GetContratos();
+
+        if (contratoId != null && contratoId > 0)
+        {
+            ViewBag.ContratoId = contratoId;
+        }
+
         return View();
     }
+
 
     [HttpPost]
     public IActionResult Create(Pago pago)

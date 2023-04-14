@@ -274,10 +274,12 @@ public class RepositorioContrato
         Boolean res = false;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"UPDATE contrato SET IdInmueble = @idInmueble, IdInquilino = @idInquilino, FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion, MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo WHERE Id = @id";
+            string query = @"UPDATE contrato SET IdInmueble = @idInmueble, IdInquilino = @idInquilino, 
+                            FechaInicio = @fechaInicio, FechaFinalizacion = @fechaFinalizacion,
+                            MontoAlquilerMensual = @montoAlquilerMensual, Activo = @activo WHERE Id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                if (contrato.FechaInicio != null && contrato.FechaFinalizacion != null && contrato.MontoAlquilerMensual > 0 && contrato.Activo != null)
+                if (contrato.FechaInicio != null && contrato.FechaFinalizacion != null && contrato.MontoAlquilerMensual > 0)
                 {
                     command.Parameters.AddWithValue("@id", contrato.Id);
                     command.Parameters.AddWithValue("@idInmueble", contrato.IdInmueble);

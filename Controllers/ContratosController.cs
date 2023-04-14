@@ -131,7 +131,7 @@ public class ContratosController : Controller
         }
     }
 
-    [HttpPost]
+     [HttpPost]
     public IActionResult UpdateContrato(Contrato contrato)
     {
         try
@@ -147,7 +147,7 @@ public class ContratosController : Controller
                 TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
                 return RedirectToAction("Update");
             }
-
+            
             RepositorioContrato repositorioContrato = new RepositorioContrato();
             Boolean res = repositorioContrato.Actualizar(contrato);
             if (res == true)
@@ -157,15 +157,18 @@ public class ContratosController : Controller
             else
             {
                 TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-                return RedirectToAction("Update");
+                return RedirectToAction("Update", new { id = contrato.Id });
             }
         }
         catch (Exception ex)
         {
             TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-            return RedirectToAction("Update");
+            return RedirectToAction("Update", new { id = contrato.Id });
         }
     }
+ 
+
+  
 
 
 }

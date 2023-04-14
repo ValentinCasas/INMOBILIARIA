@@ -27,9 +27,22 @@
                         Contrato</label>
                     <select class="form-control select2" id="idContrato" name="idContrato">
                         <option value="">Seleccione un contrato...</option>
+                        @if (@ViewBag.ContratoId != null)
+                        {
+                            @foreach (var contrato in ListaContratos.Where(c => c.Id == @ViewBag.ContratoId))
+                            {
+                                <option value="@ViewBag.ContratoId" selected>@contrato.ToString()</option>
+                            }
+                        }else{
+
                         @foreach (var contrato in ListaContratos)
                         {
-                            <option value="@contrato.Id">@contrato.ToString() </option>
+                            if (contrato.Activo == true)
+                            {
+                                <option value="@contrato.Id">@contrato.ToString() </option>
+                            }
+                        }
+
                         }
                     </select>
                 </div>

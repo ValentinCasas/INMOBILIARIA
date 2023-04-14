@@ -35,8 +35,13 @@
                 <div class="form-group my-2">
                     <label for="activo" class="form-label"><ion-icon name="checkbox-outline"></ion-icon> Activo</label>
                     <div>
-                        <input type="checkbox" value="true" id="activo" name="activo" class="form-check-input"
-                        @(Contrato.Activo ? "checked" : "")>
+                      
+                        <select class="form-control" id="activo" name="activo">
+    <option value="true" selected="@((Contrato.Activo == true) ? "selected" : null)">activo</option>
+    <option value="false" selected="@((Contrato.Activo == false) ? "selected" : null)">inactivo</option>
+</select>
+
+
                     </div>
                 </div>
 

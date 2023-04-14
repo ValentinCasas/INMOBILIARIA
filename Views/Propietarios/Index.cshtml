@@ -1,5 +1,6 @@
 @{
     var lista = (IList<Propietario>)ViewBag.lista;
+    var inmuebles = (IList<Inmueble>)ViewBag.inmuebles;
     ViewData["Title"] = "Home Page";
 }
 
@@ -69,6 +70,24 @@
 
                                             </div>
                                         </div>
+
+
+<div class="card-footer">
+                  <div class="">
+                   
+        
+                    <details>
+                      <summary>Inmuebles</summary>
+                      @foreach (var inmueble in inmuebles.Where(i => i.IdPropietario == item.Id))
+                      {
+                        <div>
+                          <p>@inmueble.ToString()</p>
+                        </div>
+                      }
+                    </details>
+                            </div>
+                        </div>
+
                                     </div>
                                 </div>
                             }

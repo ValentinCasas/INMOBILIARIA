@@ -31,6 +31,7 @@ public class InmueblesController : Controller
         {
             RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
             ViewBag.lista = repositorioInmueble.GetInmuebles();
+            ViewBag.contratos = repositorioInmueble.GetContratos();
             return View();
         }
         catch (Exception ex)

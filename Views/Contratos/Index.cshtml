@@ -62,8 +62,13 @@
                                                             </svg></span>
                                                     </a>
                                         </div>
-                  
                 </div>
+
+
+<a  class="buton-pago" href="@Url.Action("Create", "Pagos", new { contratoId = item.Id })">
+                                                        <span class="button__text">Agregar pago</span>
+                                                         <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                                                    </a>
 
 
                 <div class="card-footer">
@@ -239,7 +244,22 @@
         overflow: hidden;
     }
 
+    .buton-pago {
+        position: relative;
+       
+         margin-left: 10px;
+        margin-right:10px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: 1px solid #34974d;
+        background-color: #3aa856;
+        overflow: hidden;
+    }
+
     .buton,
+    .buton-pago,
     .button__icon,
     .button__text {
         transition: all 0.3s;
@@ -247,6 +267,12 @@
 
     .buton .button__text {
         transform: translateX(35px);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .buton .button__text, .buton-pago .button__text {
+        transform: translateX(50px);
         color: #fff;
         font-weight: 600;
     }
@@ -262,20 +288,43 @@
         justify-content: center;
     }
 
-    .buton .svg {
+    .buton-pago .button__icon {
+        position: absolute;
+ 
+        height: 100%;
+        width: 39px;
+        background-color: #34974d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .buton .svg, .buton-pago .svg {
         width: 20px;
     }
+
 
     .buton:hover {
         background: #cc0000;
     }
 
-    .buton:hover .button__text {
+    .buton-pago:hover {
+        background:  #34974d;
+    }
+
+    .buton:hover .button__text, .buton-pago:hover .button__text {
         color: transparent;
     }
 
-    .buton:hover .button__icon {
+    
+
+    .buton:hover .button__icon{
         width: 148px;
+        transform: translateX(0);
+    }
+
+    .buton-pago:hover .button__icon {
+        width: 100%;
         transform: translateX(0);
     }
 
@@ -283,8 +332,16 @@
         background-color: #b20000;
     }
 
+    .buton-pago:active .button__icon {
+        background-color: #2e8644;
+    }
+
     .buton:active {
         border: 1px solid #b20000;
+    }
+
+    .buton-pago:active {
+        border: 1px solid #2e8644;
     }
 </style>
 
