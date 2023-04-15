@@ -130,11 +130,25 @@
         </div>
     </div>
 
+
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert" role="alert">
+            <button type="button" class="closeError" data-dismiss="alert" aria-label="Close">
+                <ion-icon name="close"></ion-icon>
+            </button>
+            <p>@TempData["Mensaje"]</p>
+        </div>
+    }
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -149,25 +163,24 @@
 
     <script defer>
 
+
         /* para que aparezca formulario de contratos por fecha */
         $(document).ready(function () {
             $('#buscarPorFecha').on('click', function () {
-                $('#form-container, .overlay').show();
+                $('#form-container').show();
             });
 
             $('#form-container .close').on('click', function () {
-                $('#form-container, .overlay').hide();
-            });
-
-            $(document).mouseup(function (e) {
-                var container = $("#form-container");
-                if (!container.is(e.target) && container.has(e.target).length === 0) {
-                    container.hide();
-                    $('.overlay').hide();
-                }
+                $('#form-container').hide();
             });
         });
 
+        $(document).mouseup(function (e) {
+            var container = $("#form-container");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.hide();
+            }
+        });
 
 
         $(document).ready(function () {
@@ -349,5 +362,6 @@
         outline: 0;
         cursor: pointer;
     }
+
 </style>
 

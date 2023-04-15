@@ -10,6 +10,33 @@ public class RepositorioInquilino
     {
     }
 
+    public List<Multa> GetMultas()
+    {
+        List<Multa> multas = new List<Multa>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"SELECT Id, IdInquilino, Monto
+                         FROM multa";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Multa multa = new Multa();
+                        multa.Id = reader.GetInt32("Id");
+                        multa.IdInquilino = reader.GetInt32("IdInquilino");
+                        multa.Monto = reader.GetDecimal("Monto");
+                        multas.Add(multa);
+                    }
+                }
+                connection.Close();
+            }
+        }
+        return multas;
+    }
+
     public List<Inquilino> GetInquilinos()
     {
         List<Inquilino> inquilinos = new List<Inquilino>();

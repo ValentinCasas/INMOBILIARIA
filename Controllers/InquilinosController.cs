@@ -31,6 +31,7 @@ public class InquilinosController : Controller
     {
         RepositorioInquilino repositorioInquilino = new RepositorioInquilino();
         ViewBag.lista = repositorioInquilino.GetInquilinos();
+        ViewBag.multas = repositorioInquilino.GetMultas();
         return View();
     }
 

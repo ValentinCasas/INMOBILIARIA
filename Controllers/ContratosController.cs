@@ -41,50 +41,50 @@ public class ContratosController : Controller
         return View();
     }
 
-   [HttpPost]
-public IActionResult Create(Contrato contrato)
-{
-    try
+    [HttpPost]
+    public IActionResult Create(Contrato contrato)
     {
-        if (contrato.FechaInicio >= contrato.FechaFinalizacion)
+        try
         {
-            TempData["Error"] = "La fecha de inicio debe ser anterior a la fecha de finalización";
-            return RedirectToAction("Create", contrato);
+
+            if (contrato.FechaInicio >= contrato.FechaFinalizacion)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser anterior a la fecha de finalización";
+                return RedirectToAction("Create");
+            }
+
+            if (contrato.FechaInicio < DateTime.Now.Date)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
+                return RedirectToAction("Create");
+            }
+
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+
+            if (repositorioContrato.ExisteSolapamientoContratosActivos(contrato.IdInmueble, contrato.FechaInicio, contrato.FechaFinalizacion))
+            {
+                TempData["Error"] = "Ya existe un contrato activo en el mismo inmueble que se solapa con las fechas del nuevo contrato";
+                return RedirectToAction("Create");
+            }
+
+            int res = repositorioContrato.Alta(contrato);
+
+            if (res > 0)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Create");
+            }
         }
-
-        if (contrato.FechaInicio < DateTime.Now.Date)
-        {
-            TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
-            return RedirectToAction("Create", contrato);
-        }
-
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-
-        if (repositorioContrato.ExisteSolapamientoContratosActivos(contrato.IdInmueble, contrato.FechaInicio, contrato.FechaFinalizacion))
-        {
-            TempData["Error"] = "Ya existe un contrato activo en el mismo inmueble que se solapa con las fechas del nuevo contrato";
-            return RedirectToAction("Create", contrato);
-        }
-
-        int res = repositorioContrato.Alta(contrato);
-
-        if (res > 0)
-        {
-            return RedirectToAction("index");
-        }
-        else
+        catch (Exception ex)
         {
             TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-            return RedirectToAction("Create", contrato);
+            return RedirectToAction("Create");
         }
     }
-    catch (Exception ex)
-    {
-        TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-        return RedirectToAction("Create", contrato);
-    }
-}
-
 
 
     [HttpGet]
@@ -140,41 +140,63 @@ public IActionResult Create(Contrato contrato)
     }
 
     [HttpPost]
-    public IActionResult UpdateContrato(Contrato contrato)
+public IActionResult UpdateContrato(Contrato contrato)
+{
+     RepositorioContrato repositorioContrato = new RepositorioContrato();
+    try
     {
-        try
+        if (contrato.FechaFinalizacion < contrato.FechaInicio)
         {
-            if (contrato.FechaInicio >= contrato.FechaFinalizacion)
+            TempData["Error"] = "La fecha de finalización no puede ser anterior a la fecha de inicio";
+            return RedirectToAction("Update", new { id = contrato.Id });
+        }
+        else
+        {
+            TimeSpan tiempoTranscurrido = DateTime.Now.Date - contrato.FechaInicio;
+            if (contrato.FechaFinalizacion < DateTime.Now.Date && !contrato.Activo)
             {
-                TempData["Error"] = "La fecha de inicio debe ser anterior a la fecha de finalización";
-                return RedirectToAction("Update");
-            }
+                contrato.Activo = false;
+                // Si la fecha de finalización es anterior a la fecha actual, se debe calcular la multa
+                TimeSpan tiempoAlquiler = contrato.FechaFinalizacion - contrato.FechaInicio;
+                // Actualizar el tiempo transcurrido para tener en cuenta la fecha de finalización
+                tiempoTranscurrido = contrato.FechaFinalizacion - contrato.FechaInicio;
 
-            if (contrato.FechaInicio < DateTime.Now.Date)
-            {
-                TempData["Error"] = "La fecha de inicio debe ser igual o posterior a la fecha actual";
-                return RedirectToAction("Update");
+                // Se verifica si se cumplió menos de la mitad del tiempo original de alquiler
+                if (tiempoTranscurrido.TotalDays < (tiempoAlquiler.TotalDays / 2))
+                {
+                }
+                TempData["Mensaje"] = "Debe pagar 2 (dos) meses extra de alquiler: $" + contrato.MontoAlquilerMensual*2;
+                repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual*2);
             }
-
-            RepositorioContrato repositorioContrato = new RepositorioContrato();
-            Boolean res = repositorioContrato.Actualizar(contrato);
-            if (res == true)
+            else if (contrato.FechaFinalizacion >= DateTime.Now.Date && !contrato.Activo)
             {
-                return RedirectToAction("index");
+                TempData["Mensaje"] = "Debe pagar 1 (un) mes extra de alquiler: $" + contrato.MontoAlquilerMensual;
+                repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual);
             }
-            else
+            if (contrato.Activo)
             {
-                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-                return RedirectToAction("Update", new { id = contrato.Id });
+                TempData.Remove("Error"); // Se elimina el mensaje de error si el contrato está activo
             }
         }
-        catch (Exception ex)
+
+       
+        Boolean res = repositorioContrato.Actualizar(contrato);
+        if (res == true)
+        {
+            return RedirectToAction("index");
+        }
+        else
         {
             TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
             return RedirectToAction("Update", new { id = contrato.Id });
         }
     }
-
+    catch (Exception ex)
+    {
+        TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+        return RedirectToAction("Update", new { id = contrato.Id });
+    }
+}
 
 
 

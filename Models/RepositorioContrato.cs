@@ -328,5 +328,24 @@ public class RepositorioContrato
         return res;
     }
 
+    public Boolean AgregarMulta(int idInquilino, decimal MontoMulta)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"INSERT INTO multa (IdInquilino,Monto)
+                         VALUES
+                         (@idInquilino, @montoMulta)";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@idInquilino", idInquilino);
+                command.Parameters.AddWithValue("@montoMulta", MontoMulta);
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                connection.Close();
+                return rowsAffected > 0; // Devuelve true si se insertó al menos una fila
+            }
+        }
+    }
+
 
 }
