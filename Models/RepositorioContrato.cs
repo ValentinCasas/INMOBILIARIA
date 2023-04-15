@@ -216,6 +216,34 @@ public class RepositorioContrato
         return res;
     }
 
+    public bool ExisteSolapamientoContratosActivos(int idInmueble, DateTime fechaInicio, DateTime fechaFinalizacion)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"SELECT EXISTS (
+            SELECT *
+            FROM contrato c
+            INNER JOIN inmueble i ON c.IdInmueble = i.Id
+            WHERE i.Id = @idInmueble
+            AND c.Activo = 1
+            AND ((c.FechaInicio BETWEEN @fechaInicio AND @fechaFinalizacion)
+            OR (c.FechaFinalizacion BETWEEN @fechaInicio AND @fechaFinalizacion)
+            OR (c.FechaInicio <= @fechaInicio AND c.FechaFinalizacion >= @fechaFinalizacion))
+        )";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@idInmueble", idInmueble);
+                command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                command.Parameters.AddWithValue("@fechaFinalizacion", fechaFinalizacion);
+                connection.Open();
+                int count = Convert.ToInt32(command.ExecuteScalar());
+                connection.Close();
+                return count > 0;
+            }
+        }
+    }
+
+
     public Boolean Baja(int id)
     {
         Boolean res = false;

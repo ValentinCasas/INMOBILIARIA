@@ -149,6 +149,27 @@
 
     <script defer>
 
+        /* para que aparezca formulario de contratos por fecha */
+        $(document).ready(function () {
+            $('#buscarPorFecha').on('click', function () {
+                $('#form-container, .overlay').show();
+            });
+
+            $('#form-container .close').on('click', function () {
+                $('#form-container, .overlay').hide();
+            });
+
+            $(document).mouseup(function (e) {
+                var container = $("#form-container");
+                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                    container.hide();
+                    $('.overlay').hide();
+                }
+            });
+        });
+
+
+
         $(document).ready(function () {
             // Obtener todas las tarjetas de usuario
             var userCards = $(".card");

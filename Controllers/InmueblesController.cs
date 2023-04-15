@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using System.Globalization;
+
 using System.Diagnostics;
 
 namespace INMOBILIARIA.Controllers;
@@ -29,9 +31,12 @@ public class InmueblesController : Controller
     {
         try
         {
+
             RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+
             ViewBag.lista = repositorioInmueble.GetInmuebles();
             ViewBag.contratos = repositorioInmueble.GetContratos();
+
             return View();
         }
         catch (Exception ex)
@@ -39,6 +44,8 @@ public class InmueblesController : Controller
             throw;
         }
     }
+
+
     public IActionResult Update()
     {
         return View();
@@ -151,6 +158,35 @@ public class InmueblesController : Controller
             return RedirectToAction("Update");
         }
     }
+
+    [HttpPost]
+    public IActionResult InmueblePorFecha(string fechaInicio, string fechaFin)
+    {
+        try
+        {
+            DateTime fechaInicioDateTime = DateTime.ParseExact(fechaInicio, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime fechaFinDateTime = DateTime.ParseExact(fechaFin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            RepositorioInmueble repositorioInmueble = new RepositorioInmueble();
+            List<Inmueble> inmuebles = repositorioInmueble.BuscarInmueblesPorFecha(fechaInicioDateTime, fechaFinDateTime);
+
+            if (inmuebles != null)
+            {
+                ViewBag.lista = inmuebles;
+                ViewBag.contratos = repositorioInmueble.GetContratos();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        catch (Exception ex)
+        {
+            return RedirectToAction("Index");
+        }
+    }
+
 
 
 }

@@ -14,6 +14,7 @@
         </div>
 
       <div class="card bg-light" id="card-form">
+
         <div class="card-body">
 
           @if (lista.Count != 0){
@@ -22,6 +23,10 @@
             {
                 <div class="col">
               <div class="card  border-secondary">
+        <div class="card-header ">
+      <span class="payment-count bg-primary">  @pagos.Where(p => p.IdContrato == item.Id).Count()
+      </span>
+    </div>
                 <div class="card-body">
                   <h5 class="card-title "> $ @item.MontoAlquilerMensual </h5>
                    <h6 class="card-subtitle mb-2 text-muted">@item.FechaInicio </h6>   
@@ -71,7 +76,7 @@
                                                     </a>
 
 
-                <div class="card-footer">
+                <div class="card-footer mt-2">
                   <div class="">
                     <details>
                       <summary>Detalles</summary>
@@ -255,6 +260,7 @@
         align-items: center;
         border: 1px solid #34974d;
         background-color: #3aa856;
+        border-radius:5px;
         overflow: hidden;
     }
 
@@ -343,6 +349,24 @@
     .buton-pago:active {
         border: 1px solid #2e8644;
     }
+
+    .payment-count {
+  display: block;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  @* background-color: red; *@
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
 </style>
 
 
