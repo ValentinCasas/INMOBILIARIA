@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace INMOBILIARIA.Controllers;
 
@@ -33,13 +34,16 @@ public class ContratosController : Controller
         return View();
     }
 
-    public IActionResult Create()
+    [HttpGet]
+    public IActionResult Create(int? inmuebleId)
     {
         RepositorioContrato repositorioContrato = new RepositorioContrato();
+        ViewBag.InmuebleId = inmuebleId;
         ViewBag.listaInquilinos = repositorioContrato.GetInquilinos();
         ViewBag.listaInmuebles = repositorioContrato.GetInmuebles();
         return View();
     }
+
 
     [HttpPost]
     public IActionResult Create(Contrato contrato)
@@ -140,64 +144,115 @@ public class ContratosController : Controller
     }
 
     [HttpPost]
-public IActionResult UpdateContrato(Contrato contrato)
-{
-     RepositorioContrato repositorioContrato = new RepositorioContrato();
-    try
+    public IActionResult UpdateContrato(Contrato contrato)
     {
-        if (contrato.FechaFinalizacion < contrato.FechaInicio)
+        Boolean res;
+        RepositorioContrato repositorioContrato = new RepositorioContrato();
+        try
         {
-            TempData["Error"] = "La fecha de finalización no puede ser anterior a la fecha de inicio";
-            return RedirectToAction("Update", new { id = contrato.Id });
-        }
-        else
-        {
-            TimeSpan tiempoTranscurrido = DateTime.Now.Date - contrato.FechaInicio;
-            if (contrato.FechaFinalizacion < DateTime.Now.Date && !contrato.Activo)
+            if (contrato.FechaFinalizacion < contrato.FechaInicio)
             {
-                contrato.Activo = false;
-                // Si la fecha de finalización es anterior a la fecha actual, se debe calcular la multa
-                TimeSpan tiempoAlquiler = contrato.FechaFinalizacion - contrato.FechaInicio;
-                // Actualizar el tiempo transcurrido para tener en cuenta la fecha de finalización
-                tiempoTranscurrido = contrato.FechaFinalizacion - contrato.FechaInicio;
-
-                // Se verifica si se cumplió menos de la mitad del tiempo original de alquiler
-                if (tiempoTranscurrido.TotalDays < (tiempoAlquiler.TotalDays / 2))
+                TempData["Error"] = "La fecha de finalización no puede ser anterior a la fecha de inicio";
+                return RedirectToAction("Update", new { id = contrato.Id });
+            }
+            else if (contrato.FechaInicio > DateTime.Now.Date && (contrato.Activo || !contrato.Activo))
+            {
+                // Si la fecha de inicio es posterior a la fecha actual y el contrato está activo o inactivo,
+                // no se agrega ninguna multa y se actualiza perfectamente
+                res = repositorioContrato.Actualizar(contrato);
+                if (res == true)
                 {
+                    return RedirectToAction("index");
                 }
-                TempData["Mensaje"] = "Debe pagar 2 (dos) meses extra de alquiler: $" + contrato.MontoAlquilerMensual*2;
-                repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual*2);
+                else
+                {
+                    TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                    return RedirectToAction("Update", new { id = contrato.Id });
+                }
             }
-            else if (contrato.FechaFinalizacion >= DateTime.Now.Date && !contrato.Activo)
+            else
             {
-                TempData["Mensaje"] = "Debe pagar 1 (un) mes extra de alquiler: $" + contrato.MontoAlquilerMensual;
-                repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual);
-            }
-            if (contrato.Activo)
-            {
-                TempData.Remove("Error"); // Se elimina el mensaje de error si el contrato está activo
-            }
-        }
+                TimeSpan tiempoTranscurrido = DateTime.Now.Date - contrato.FechaInicio;
+                if (contrato.FechaFinalizacion < DateTime.Now.Date && !contrato.Activo)
+                {
+                    contrato.Activo = false;
+                    // Si la fecha de finalización es anterior a la fecha actual, se debe calcular la multa
+                    TimeSpan tiempoAlquiler = contrato.FechaFinalizacion - contrato.FechaInicio;
+                    // Actualizar el tiempo transcurrido para tener en cuenta la fecha de finalización
+                    tiempoTranscurrido = contrato.FechaFinalizacion - contrato.FechaInicio;
 
-       
-        Boolean res = repositorioContrato.Actualizar(contrato);
-        if (res == true)
-        {
-            return RedirectToAction("index");
+                    // Se verifica si se cumplió menos de la mitad del tiempo original de alquiler
+                    if (tiempoTranscurrido.TotalDays < (tiempoAlquiler.TotalDays / 2))
+                    {
+                    }
+                    TempData["Mensaje"] = "Debe pagar 2 (dos) meses extra de alquiler: $" + contrato.MontoAlquilerMensual * 2;
+                    repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual * 2);
+                }
+                else if (contrato.FechaFinalizacion >= DateTime.Now.Date && !contrato.Activo)
+                {
+                    TempData["Mensaje"] = "Debe pagar 1 (un) mes extra de alquiler: $" + contrato.MontoAlquilerMensual;
+                    repositorioContrato.AgregarMulta(contrato.IdInquilino, contrato.MontoAlquilerMensual);
+                }
+                if (contrato.Activo)
+                {
+                    TempData.Remove("Error"); // Se elimina el mensaje de error si el contrato está activo
+                }
+            }
+
+            res = repositorioContrato.Actualizar(contrato);
+            if (res == true)
+            {
+                return RedirectToAction("index");
+            }
+            else
+            {
+                TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
+                return RedirectToAction("Update", new { id = contrato.Id });
+            }
         }
-        else
+        catch (Exception ex)
         {
             TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
             return RedirectToAction("Update", new { id = contrato.Id });
         }
     }
-    catch (Exception ex)
-    {
-        TempData["Error"] = "Por favor llene todos los campos y ponga los datos correctamente";
-        return RedirectToAction("Update", new { id = contrato.Id });
-    }
-}
 
+    [HttpPost]
+    public IActionResult ContratoPorFecha(string fechaInicio, string fechaFin)
+    {
+        try
+        {
+            DateTime fechaInicioDateTime = DateTime.ParseExact(fechaInicio, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime fechaFinDateTime = DateTime.ParseExact(fechaFin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            if (fechaInicioDateTime > fechaFinDateTime)
+            {
+                TempData["Error"] = "La fecha de inicio debe ser posterior a la fecha final";
+                return RedirectToAction("Index");
+            }
+
+            RepositorioContrato repositorioContrato = new RepositorioContrato();
+            List<Contrato> contratos = repositorioContrato.ObtenerContratosVigentes(fechaInicioDateTime, fechaFinDateTime);
+
+
+            if (contratos.Count > 0)
+            {
+                ViewBag.lista = contratos;
+                ViewBag.pagos = repositorioContrato.GetPagos();
+                return View();
+            }
+            else
+            {
+                TempData["Error"] = "No se encontraron contratos vigentes entre las fechas: " + fechaInicioDateTime + " / " + fechaFinDateTime;
+                return RedirectToAction("Index");
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = "Error al encontrar contratos";
+            return RedirectToAction("Index");
+        }
+    }
 
 
 

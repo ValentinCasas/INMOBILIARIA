@@ -245,24 +245,26 @@ public class RepositorioContrato
 
 
     public Boolean Baja(int id)
+{
+    Boolean res = false;
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        Boolean res = false;
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        string query = @"DELETE FROM pago WHERE IdContrato = @id;
+                         DELETE FROM contrato WHERE Id = @id;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            string query = @"DELETE FROM contrato WHERE Id = @id";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
             {
-                command.Parameters.AddWithValue("@id", id);
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
-                {
-                    res = true;
-                }
+                res = true;
             }
         }
-        return res;
     }
+    return res;
+}
+
 
     public Contrato ObtenerPorId(int id)
     {
@@ -345,6 +347,73 @@ public class RepositorioContrato
                 return rowsAffected > 0; // Devuelve true si se insertó al menos una fila
             }
         }
+    }
+
+    public List<Contrato> ObtenerContratosVigentes(DateTime fechaInicio, DateTime fechaFin)
+    {
+        List<Contrato> contratos = new List<Contrato>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"
+                SELECT c.id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino, c.IdInmueble,
+i.Nombre, i.Apellido, i.Dni, i.Telefono, i.Email, i.Id,
+inmueble.Id, inmueble.Direccion, inmueble.Uso, inmueble.Tipo, inmueble.IdPropietario, inmueble.CantidadAmbientes, inmueble.Coordenadas, inmueble.PrecioInmueble, inmueble.Estado
+FROM contrato c
+JOIN inquilino i ON c.IdInquilino = i.Id
+JOIN inmueble ON c.IdInmueble = inmueble.Id
+WHERE c.Activo = 1
+AND (c.FechaFinalizacion >= @fechaDesde AND c.FechaInicio <= @fechaHasta)
+
+                ";
+
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@fechaDesde", fechaInicio);
+                command.Parameters.AddWithValue("@fechaHasta", fechaFin);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Contrato contrato = new Contrato()
+                        {
+                            Id = reader.GetInt32("id"),
+                            FechaInicio = reader.GetDateTime("FechaInicio"),
+                            FechaFinalizacion = reader.GetDateTime("FechaFinalizacion"),
+                            MontoAlquilerMensual = reader.GetDecimal("MontoAlquilerMensual"),
+                            Activo = reader.GetBoolean("Activo"),
+                            IdInquilino = reader.GetInt32("IdInquilino"),
+                            IdInmueble = reader.GetInt32("IdInmueble"),
+                            Inquilino = new Inquilino()
+                            {
+                                Nombre = reader.GetString("Nombre"),
+                                Apellido = reader.GetString("Apellido"),
+                                Dni = reader.GetInt64("Dni"),
+                                Telefono = reader.GetInt64("Telefono"),
+                                Id = reader.GetInt32("Id"),
+                                Email = reader.GetString("Email"),
+                            },
+                            Inmueble = new Inmueble()
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Direccion = reader.GetString("Direccion"),
+                                Uso = reader.GetString("Uso"),
+                                IdPropietario = reader.GetInt32("IdPropietario"),
+                                Tipo = reader.GetString("Tipo"),
+                                CantidadAmbientes = reader.GetInt32("CantidadAmbientes"),
+                                Coordenadas = reader.GetString("Coordenadas"),
+                                PrecioInmueble = reader.GetDecimal("PrecioInmueble"),
+                                Estado = reader.GetString("Estado"),
+                            },
+                        };
+                        contratos.Add(contrato);
+
+                    }
+                }
+            }
+        }
+        return contratos;
     }
 
 

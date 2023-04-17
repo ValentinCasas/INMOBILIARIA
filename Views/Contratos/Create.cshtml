@@ -56,9 +56,17 @@
                         Inmueble</label>
                     <select class="form-control select2" id="idInmueble" name="idInmueble">
                         <option value="">Seleccione un Inmueble...</option>
+                        @if (@ViewBag.InmuebleId != null)
+                        {
+                            @foreach (var inmueble in ListaInmuebles.Where(i => i.Id == @ViewBag.InmuebleId))
+                            {
+                                <option value="@ViewBag.InmuebleId" selected>@inmueble.ToString()</option>
+                            }
+                        }else{
                         @foreach (var inmueble in ListaInmuebles)
                         {
                             <option value="@inmueble.Id">@inmueble.ToString()</option>
+                        }
                         }
                     </select>
                 </div>

@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\VALENTIN\Desktop\INMOBILIARIA
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/VALENTIN/Desktop/INMOBILIARIA/Views/Contratos/ContratoPorFecha.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9zXENvbnRyYXRvUG9yRmVjaGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/VALENTIN/Desktop/INMOBILIARIA/Views/Contratos/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9zXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

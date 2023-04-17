@@ -211,24 +211,26 @@ public class RepositorioInmueble
     }
 
     public Boolean Baja(int id)
+{
+    Boolean res = false;
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        Boolean res = false;
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        string query = @"DELETE FROM pago WHERE IdContrato IN (SELECT Id FROM contrato WHERE IdInmueble = @id);
+                         DELETE FROM contrato WHERE IdInmueble = @id;
+                         DELETE FROM inmueble WHERE Id = @id;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            string query = @"DELETE FROM inmueble WHERE Id = @id";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
             {
-                command.Parameters.AddWithValue("@id", id);
-                connection.Open();
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
-                {
-                    res = true;
-                }
+                res = true;
             }
         }
-        return res;
     }
+    return res;
+}
 
     public Boolean Actualizar(Inmueble inmueble)
     {
