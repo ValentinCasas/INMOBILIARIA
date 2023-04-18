@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-04-2023 a las 05:33:51
+-- Tiempo de generación: 18-04-2023 a las 09:15:00
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -42,8 +42,9 @@ CREATE TABLE `contrato` (
 --
 
 INSERT INTO `contrato` (`Id`, `FechaInicio`, `FechaFinalizacion`, `MontoAlquilerMensual`, `Activo`, `IdInquilino`, `IdInmueble`) VALUES
-(18, '2023-04-08 00:00:00', '2023-04-28 00:00:00', '5000', 1, 16, 15),
-(19, '2023-04-21 00:00:00', '2023-04-25 00:00:00', '1000', 1, 23, 14);
+(19, '2023-03-30 00:00:00', '2023-04-25 00:00:00', '5000', 1, 23, 14),
+(27, '2023-05-01 00:00:00', '2023-05-10 00:00:00', '99000', 0, 23, 14),
+(32, '2023-05-01 00:00:00', '2023-05-31 00:00:00', '5000', 1, 36, 14);
 
 -- --------------------------------------------------------
 
@@ -69,7 +70,9 @@ CREATE TABLE `inmueble` (
 
 INSERT INTO `inmueble` (`Id`, `Direccion`, `Uso`, `Tipo`, `CantidadAmbientes`, `Coordenadas`, `PrecioInmueble`, `Estado`, `IdPropietario`) VALUES
 (14, 'los quebrachos', 'comercial', 'local', 3, '123123123', '5000', 'disponible', 16),
-(15, 'la punta', 'residencial', 'casa', 5, '122332', '2000', 'disponible', 13);
+(15, 'la punta', 'residencial', 'casa', 5, '122332', '2000', 'disponible', 13),
+(16, 'La matanza', 'residencial', 'casa', 1, '-2344322131', '15000', 'disponible', 19),
+(18, 'Ranelagh', 'residencial', 'casa', 7, '2144242414', '99000', 'disponible', 13);
 
 -- --------------------------------------------------------
 
@@ -124,6 +127,35 @@ INSERT INTO `inquilino` (`Id`, `Dni`, `Nombre`, `Apellido`, `Telefono`, `Email`)
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `multa`
+--
+
+CREATE TABLE `multa` (
+  `Id` int(11) NOT NULL,
+  `Monto` decimal(11,0) NOT NULL,
+  `IdInquilino` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `multa`
+--
+
+INSERT INTO `multa` (`Id`, `Monto`, `IdInquilino`) VALUES
+(1, '1000', 23),
+(2, '2000', 23),
+(3, '15000', 9),
+(4, '15000', 9),
+(5, '30000', 9),
+(6, '5000', 36),
+(7, '5000', 36),
+(8, '5000', 36),
+(9, '5000', 23),
+(10, '5000', 23),
+(11, '5000', 23);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `pago`
 --
 
@@ -140,11 +172,12 @@ CREATE TABLE `pago` (
 --
 
 INSERT INTO `pago` (`Id`, `NumDePago`, `FechaDePago`, `Importe`, `IdContrato`) VALUES
-(7, 1, '2023-04-07 00:00:00', '5000', 18),
-(8, 2, '2023-04-07 00:00:00', '5000', 18),
 (9, 1, '2023-04-07 00:00:00', '1000', 19),
-(11, 3, '2023-04-07 00:00:00', '5000', 18),
-(12, 2, '2023-04-07 00:00:00', '1000', 19);
+(12, 2, '2023-04-07 00:00:00', '1000', 19),
+(17, 3, '2023-04-14 00:00:00', '1000', 19),
+(21, 1, '2023-04-14 00:00:00', '99000', 27),
+(22, 4, '2023-04-14 00:00:00', '1000', 19),
+(23, 1, '2023-04-15 00:00:00', '5000', 32);
 
 -- --------------------------------------------------------
 
@@ -166,9 +199,7 @@ CREATE TABLE `propietario` (
 --
 
 INSERT INTO `propietario` (`Id`, `Dni`, `Nombre`, `Apellido`, `Telefono`, `Email`) VALUES
-(12, 111111, 'Gabriel', 'Garcia', 11223344, 'gabriel.garcia@gmail.com'),
 (13, 22222222, 'Laura', 'Ramirez', 22334455, 'laura.ramirez@gmail.com'),
-(15, 44444444, 'Lucas', 'Vega', 44556677, 'lucas.vega@gmail.com'),
 (16, 55555555, 'Carolina', 'Lopez', 55667788, 'carolina.lopez@gmail.com'),
 (17, 66666666, 'Javier', 'Mendez', 66778899, 'javier.mendez@gmail.com'),
 (18, 77777777, 'Natalia', 'Gonzalez', 77889900, 'natalia.gonzalez@gmail.com'),
@@ -204,7 +235,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`Id`, `Nombre`, `Apellido`, `Edad`, `Dni`, `Email`, `Clave`, `AvatarUrl`, `Rol`) VALUES
 (37, 'Mariano', 'Luzza Bonilla', 20, 22222222, 'marianoLuzza@gmail.com', 'CMBf7jPJjZCxn7eoNFiGoh/Mg1ouPR2I0tyV4LM+g7k=', '/Uploads\\avatar_d004435cfc6e4401a7a3fa5721b02840.jpg', 2),
-(38, 'Maria', 'Laura', 30, 34000000, 'mariaLaura@gmail.com', 'vZlEtHizkfNSyogT4zTsFwLEB9DX0ZzRho4EvRqb6Y8=', '/Uploads\\avatar_13f742dadf214c29b4445a293a869e7e.jpg', 3),
+(38, 'Maria', 'Laura Morales', 30, 34000000, 'mariaLaura@gmail.com', 'vZlEtHizkfNSyogT4zTsFwLEB9DX0ZzRho4EvRqb6Y8=', '/Uploads\\avatar_13f742dadf214c29b4445a293a869e7e.jpg', 3),
 (39, 'Kevin', 'Garcia', 21, 41222333, 'kevinGarcia12@gmail.com', 'Qn+o5tUUVufr6kzFoB2ObdSl0UvnzhnNWDH6o2nYQw0=', '/Imagenes/avatar_por_defecto.jpg', 3),
 (40, 'Ivan', 'Collado', 35, 32444444, 'ivanCollado@gmail.com', 'zEgX/k8gU+/CtoZ0E8eSteIaRVwfZI5NDlnmD+K0I6U=', '/Uploads\\avatar_58a3a29a7ae54f76a49e75985dc03e6a.jpg', 3),
 (41, 'Pia', 'Lucero', 20, 44234234, 'piaLucero@gmail.com', '73RA559NytJz3RDfwea02Y4xt1oJP5Wpz4QMCbJ2gS4=', '/Uploads\\avatar_248df2d23e06436685c6d64f50f2bb91.jpg', 2),
@@ -236,6 +267,13 @@ ALTER TABLE `inquilino`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Indices de la tabla `multa`
+--
+ALTER TABLE `multa`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `IdInquilino` (`IdInquilino`);
+
+--
 -- Indices de la tabla `pago`
 --
 ALTER TABLE `pago`
@@ -262,13 +300,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
@@ -277,10 +315,16 @@ ALTER TABLE `inquilino`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
+-- AUTO_INCREMENT de la tabla `multa`
+--
+ALTER TABLE `multa`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
@@ -292,7 +336,7 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Restricciones para tablas volcadas
@@ -310,6 +354,12 @@ ALTER TABLE `contrato`
 --
 ALTER TABLE `inmueble`
   ADD CONSTRAINT `inmueble_ibfk_2` FOREIGN KEY (`IdPropietario`) REFERENCES `propietario` (`id`);
+
+--
+-- Filtros para la tabla `multa`
+--
+ALTER TABLE `multa`
+  ADD CONSTRAINT `multa_ibfk_1` FOREIGN KEY (`IdInquilino`) REFERENCES `inquilino` (`id`);
 
 --
 -- Filtros para la tabla `pago`
