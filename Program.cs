@@ -43,7 +43,7 @@ builder.Services.AddSignalR();//añade signalR
 
 var app = builder.Build();
 
-// Habilitar CORS
+// permit acceder a recursos de otro sitio web en un dominio diferente al que originó la solicitud
 app.UseCors(x => x
 	.AllowAnyOrigin()
 	.AllowAnyMethod()
