@@ -377,27 +377,23 @@ public class UsuariosController : Controller
                     return View();
                 }
 
+                // Se aplica la función de hash PBKDF2 a la contraseña ingresada por el usuario.
+                string salt = "palabrasecretaparalacontraseña";
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                 password: login.Clave,
+                                 salt: System.Text.Encoding.ASCII.GetBytes(salt),
+                                 prf: KeyDerivationPrf.HMACSHA1,
+                                 iterationCount: 30000,
+                                 numBytesRequested: 256 / 8));
 
-                // Si el usuario no tiene el rol de administrador, se aplicará la función de hash a su contraseña y se verificará su autenticación.
-                if (e.RolNombre != enRoles.Administrador.ToString())
+                // Si la contraseña no coincide.
+                if (e.Clave != hashed)
                 {
-                    // Se aplica la función de hash PBKDF2 a la contraseña ingresada por el usuario.
-                    string salt = "palabrasecretaparalacontraseña";
-                    string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                                     password: login.Clave,
-                                     salt: System.Text.Encoding.ASCII.GetBytes(salt),
-                                     prf: KeyDerivationPrf.HMACSHA1,
-                                     iterationCount: 30000,
-                                     numBytesRequested: 256 / 8));
-
-                    // Si la contraseña no coincide.
-                    if (e.Clave != hashed)
-                    {
-                        ModelState.AddModelError("", "El email o la clave no son correctos");
-                        TempData["returnUrl"] = returnUrl;
-                        return View();
-                    }
+                    ModelState.AddModelError("", "El email o la clave no son correctos");
+                    TempData["returnUrl"] = returnUrl;
+                    return View();
                 }
+
                 // Se crea una lista de Claims que contienen información sobre el usuario.
                 //todo esto se puede usar para trabajarlo por ejemplo en:
                 //<a class="nav-link" href="/Usuarios/Profile/@User.FindFirst("EmpleadoId").Value">
