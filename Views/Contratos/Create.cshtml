@@ -65,7 +65,9 @@
                         }else{
                         @foreach (var inmueble in ListaInmuebles)
                         {
+                           if(inmueble.Estado != "agotado"){ 
                             <option value="@inmueble.Id">@inmueble.ToString()</option>
+                           }
                         }
                         }
                     </select>

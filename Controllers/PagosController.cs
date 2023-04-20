@@ -63,6 +63,14 @@ public class PagosController : Controller
         try
         {
             RepositorioPago repositorioPago = new RepositorioPago();
+            Contrato contrato = repositorioPago.ObtenerContratoPorId(pago.IdContrato);
+
+            if (pago.Importe < contrato.MontoAlquilerMensual)
+            {
+                TempData["Error"] = "El importe ingresado no es suficiente para pagar el monto mensual del contrato";
+                return RedirectToAction("Create");
+            }
+
             int res = repositorioPago.Alta(pago);
             if (res > 0)
             {

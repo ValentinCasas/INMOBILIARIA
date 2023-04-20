@@ -51,6 +51,39 @@ public class RepositorioPago
         return pagos;
     }
 
+    public Contrato ObtenerContratoPorId(int id)
+    {
+        Contrato contrato = null;
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+
+            string query = @"SELECT * FROM contrato WHERE Id = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        contrato = new Contrato();
+                        contrato.Id = Convert.ToInt32(reader["id"]);
+                        contrato.IdInquilino = Convert.ToInt32(reader["IdInquilino"]);
+                        contrato.IdInmueble = Convert.ToInt32(reader["IdInmueble"]);
+                        contrato.FechaInicio = Convert.ToDateTime(reader["FechaInicio"]);
+                        contrato.FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]);
+                        contrato.MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]);
+                        contrato.Activo = Convert.ToBoolean(reader["Activo"]);
+
+                        return contrato;
+                    }
+
+
+                }
+            }
+        }
+        return contrato;
+    }
     public List<Contrato> GetContratos()
     {
         List<Contrato> contratos = new List<Contrato>();

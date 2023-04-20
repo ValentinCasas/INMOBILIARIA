@@ -59,7 +59,7 @@ public class RepositorioContrato
         List<Contrato> contratos = new List<Contrato>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"SELECT c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino,
+            string query = @"SELECT c.Id, c.FechaInicio, c.FechaFinalizacion, c.MontoAlquilerMensual, c.Activo, c.IdInquilino, c.IdInmueble,
                         i.Nombre, i.Apellido, i.Dni, i.Telefono, i.Email, i.Id,
                         inmueble.Id, inmueble.Direccion, inmueble.Uso, inmueble.Tipo, inmueble.IdPropietario, inmueble.CantidadAmbientes, inmueble.Coordenadas, inmueble.PrecioInmueble, inmueble.Estado
                         FROM contrato c
@@ -82,6 +82,7 @@ public class RepositorioContrato
                             MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]),
                             Activo = Convert.ToBoolean(reader["Activo"]),
                             IdInquilino = Convert.ToInt32(reader["IdInquilino"]),
+                            IdInmueble = Convert.ToInt32(reader["IdInmueble"]),
                             Inquilino = new Inquilino()
                             {
                                 Nombre = reader.GetString("Nombre"),
@@ -216,6 +217,7 @@ public class RepositorioContrato
         return res;
     }
 
+    //para usar en el create
     public bool ExisteSolapamientoContratosActivos(int idInmueble, DateTime fechaInicio, DateTime fechaFinalizacion)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -243,28 +245,64 @@ public class RepositorioContrato
         }
     }
 
-
-    public Boolean Baja(int id)
-{
-    Boolean res = false;
-    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    //para usar en el update
+    public int ContarSolapamientoContratosActivos(int idInmueble, DateTime fechaInicio, DateTime fechaFinalizacion, int idContratoActualizar)
     {
-        string query = @"DELETE FROM pago WHERE IdContrato = @id;
-                         DELETE FROM contrato WHERE Id = @id;";
-        using (MySqlCommand command = new MySqlCommand(query, connection))
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            command.Parameters.AddWithValue("@id", id);
-            connection.Open();
-            int rowsAffected = command.ExecuteNonQuery();
-            if (rowsAffected > 0)
+            string query = @"SELECT COUNT(*) as count
+        FROM contrato c
+        INNER JOIN inmueble i ON c.IdInmueble = i.Id
+        WHERE i.Id = @idInmueble
+        AND c.Activo = 1
+        AND ((c.FechaInicio BETWEEN @fechaInicio AND @fechaFinalizacion)
+        OR (c.FechaFinalizacion BETWEEN @fechaInicio AND @fechaFinalizacion)
+        OR (c.FechaInicio <= @fechaInicio AND c.FechaFinalizacion >= @fechaFinalizacion))
+        AND c.Id <> @idContratoActualizar";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                res = true;
+                command.Parameters.AddWithValue("@idInmueble", idInmueble);
+                command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                command.Parameters.AddWithValue("@fechaFinalizacion", fechaFinalizacion);
+                command.Parameters.AddWithValue("@idContratoActualizar", idContratoActualizar);
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    int count = 0;
+                    while (reader.Read())
+                    {
+                        if (reader["count"] != DBNull.Value)
+                        {
+                            count = Convert.ToInt32(reader["count"]);
+                        }
+                    }
+                    connection.Close();
+                    return count;
+                }
             }
         }
     }
-    return res;
-}
 
+    public Boolean Baja(int id)
+    {
+        Boolean res = false;
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            string query = @"DELETE FROM pago WHERE IdContrato = @id;
+                         DELETE FROM contrato WHERE Id = @id;";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    res = true;
+                }
+            }
+        }
+        return res;
+    }
 
     public Contrato ObtenerPorId(int id)
     {
@@ -284,6 +322,7 @@ public class RepositorioContrato
                         contrato = new Contrato();
                         contrato.Id = Convert.ToInt32(reader["id"]);
                         contrato.IdInquilino = Convert.ToInt32(reader["IdInquilino"]);
+                        contrato.IdInmueble = Convert.ToInt32(reader["IdInmueble"]);
                         contrato.FechaInicio = Convert.ToDateTime(reader["FechaInicio"]);
                         contrato.FechaFinalizacion = Convert.ToDateTime(reader["FechaFinalizacion"]);
                         contrato.MontoAlquilerMensual = Convert.ToDecimal(reader["MontoAlquilerMensual"]);

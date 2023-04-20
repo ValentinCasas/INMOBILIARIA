@@ -143,13 +143,24 @@ public class ContratosController : Controller
         }
     }
 
-    [HttpPost]
-    public IActionResult UpdateContrato(Contrato contrato)
+   [HttpPost]
+public IActionResult UpdateContrato(Contrato contrato)
+{
+    Boolean res;
+    RepositorioContrato repositorioContrato = new RepositorioContrato();
+    try
     {
-        Boolean res;
-        RepositorioContrato repositorioContrato = new RepositorioContrato();
-        try
+
+         int cantidadQueRepite = repositorioContrato.ContarSolapamientoContratosActivos(contrato.IdInmueble, contrato.FechaInicio, contrato.FechaFinalizacion, contrato.Id);
+
+        if (cantidadQueRepite >= 1)
         {
+            TempData["Error"] = "Ya existe un contrato activo en el mismo inmueble que se solapa con las fechas del nuevo contrato";
+            return RedirectToAction("Update", new { id = contrato.Id });
+        }
+
+
+
             if (contrato.FechaFinalizacion < contrato.FechaInicio)
             {
                 TempData["Error"] = "La fecha de finalización no puede ser anterior a la fecha de inicio";
